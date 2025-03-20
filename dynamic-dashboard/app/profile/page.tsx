@@ -9,9 +9,15 @@ import { DashboardLayout } from '@/components/dashboard-layout';
 import { getUserFromToken, isAuthenticated } from '@/lib/auth';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 
+// Define user type
+interface UserData {
+  name?: string;
+  email?: string;
+  [key: string]: unknown; // For other potential properties
+}
+
 export default function ProfilePage() {
   const router = useRouter();
-  const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState({
     name: '',
@@ -30,13 +36,12 @@ export default function ProfilePage() {
     }
 
     // Get user from token
-    const userData = getUserFromToken();
-    setUser(userData);
+    const userData = getUserFromToken() as UserData;
     
     // Set form data based on user (in a real app, you'd fetch this from an API)
     setFormData({
-      name: (userData as any)?.name || 'John Doe',
-      email: (userData as any)?.email || 'user@example.com',
+      name: userData?.name || 'John Doe',
+      email: userData?.email || 'user@example.com',
       phone: '(555) 123-4567',
       company: 'Acme Inc.',
     });

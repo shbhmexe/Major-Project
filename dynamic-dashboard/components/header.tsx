@@ -5,6 +5,12 @@ import { Button } from "./ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu";
 import { User } from "lucide-react";
 
+// Define user type
+interface UserData {
+  email?: string;
+  [key: string]: unknown;
+}
+
 export function Header() {
   const router = useRouter();
   const user = getUserFromToken();
@@ -35,7 +41,7 @@ export function Header() {
             <DropdownMenuContent align="end">
               {user && (
                 <DropdownMenuItem className="cursor-default">
-                  {(user as any).email || "User"}
+                  {(user as UserData).email || "User"}
                 </DropdownMenuItem>
               )}
               <DropdownMenuItem onClick={handleLogout}>

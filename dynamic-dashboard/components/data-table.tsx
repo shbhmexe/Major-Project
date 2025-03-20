@@ -11,18 +11,23 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { LoadingSpinner } from './ui/loading-spinner';
 
-interface DataTableProps {
-  data: any[];
+// Generic type for data items
+interface DataItem {
+  [key: string]: unknown;
+}
+
+interface DataTableProps<T extends DataItem> {
+  data: T[];
   columns: {
     key: string;
     label: string;
-    render?: (item: any) => React.ReactNode;
+    render?: (item: T) => React.ReactNode;
   }[];
   isLoading?: boolean;
   title?: string;
 }
 
-export function DataTable({ data, columns, isLoading = false, title = "Data" }: DataTableProps) {
+export function DataTable<T extends DataItem>({ data, columns, isLoading = false, title = "Data" }: DataTableProps<T>) {
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
@@ -85,7 +90,7 @@ export function DataTable({ data, columns, isLoading = false, title = "Data" }: 
                       <TableRow key={index}>
                         {columns.map((column) => (
                           <TableCell key={`${index}-${column.key}`}>
-                            {column.render ? column.render(item) : item[column.key]}
+                            {column.render ? column.render(item) : String(item[column.key])}
                           </TableCell>
                         ))}
                       </TableRow>

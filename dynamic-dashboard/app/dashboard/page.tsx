@@ -22,6 +22,7 @@ interface Post {
   title: string;
   body: string;
   userId: number;
+  [key: string]: unknown; // Add index signature for DataItem compatibility
 }
 
 export default function DashboardPage() {
@@ -29,7 +30,6 @@ export default function DashboardPage() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [users, setUsers] = useState<User[]>([]);
   const [isLoadingPosts, setIsLoadingPosts] = useState(true);
-  const [isLoadingUsers, setIsLoadingUsers] = useState(true);
   const [error, setError] = useState('');
 
   useEffect(() => {
@@ -49,15 +49,12 @@ export default function DashboardPage() {
         setIsLoadingPosts(false);
 
         // Fetch users
-        setIsLoadingUsers(true);
         const usersData = await dataApi.getUsers();
         setUsers(usersData);
-        setIsLoadingUsers(false);
       } catch (err) {
         console.error('Error fetching data:', err);
         setError('Failed to load data. Please try again later.');
         setIsLoadingPosts(false);
-        setIsLoadingUsers(false);
       }
     };
 

@@ -1,5 +1,11 @@
 import { jwtDecode } from "jwt-decode";
 
+// Define token type
+interface DecodedToken {
+  exp: number;
+  [key: string]: unknown;
+}
+
 // Token management with localStorage
 export const setToken = (token: string) => {
   if (typeof window !== 'undefined') {
@@ -25,7 +31,7 @@ export const isAuthenticated = () => {
   if (!token) return false;
   
   try {
-    const decodedToken: any = jwtDecode(token);
+    const decodedToken: DecodedToken = jwtDecode(token);
     const currentTime = Date.now() / 1000;
     
     // Check if token is expired
@@ -35,7 +41,7 @@ export const isAuthenticated = () => {
     }
     
     return true;
-  } catch (error) {
+  } catch {
     removeToken();
     return false;
   }
@@ -47,7 +53,7 @@ export const getUserFromToken = () => {
   
   try {
     return jwtDecode(token);
-  } catch (error) {
+  } catch {
     return null;
   }
 }; 
