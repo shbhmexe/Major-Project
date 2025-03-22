@@ -257,7 +257,7 @@ function App() {
         {/* Translator App Link */}
         <div className="bg-white rounded-2xl shadow-xl p-6">
           <motion.a
-            href="https://translate.google.com/"
+            href="https://translator-five-phi.vercel.app/"
             target="_blank"
             rel="noopener noreferrer"
             className={`flex items-center justify-center gap-3 py-3 px-4 rounded-lg ${themes[theme].primary} text-white transition-all`}
