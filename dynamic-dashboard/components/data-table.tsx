@@ -10,6 +10,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { LoadingSpinner } from './ui/loading-spinner';
+import { Search } from 'lucide-react';
 
 // Generic type for data items
 interface DataItem {
@@ -27,7 +28,12 @@ interface DataTableProps<T extends DataItem> {
   title?: string;
 }
 
-export function DataTable<T extends DataItem>({ data, columns, isLoading = false, title = "Data" }: DataTableProps<T>) {
+export function DataTable<T extends DataItem>({ 
+  data, 
+  columns, 
+  isLoading = false, 
+  title = "Data" 
+}: DataTableProps<T>) {
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
@@ -56,31 +62,36 @@ export function DataTable<T extends DataItem>({ data, columns, isLoading = false
   );
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <div className="flex items-center space-x-2">
-          <Input
-            placeholder="Search..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="max-w-sm"
-          />
+    <Card className="shadow-md">
+      <CardHeader className="border-b border-gray-200 dark:border-gray-700 pb-3">
+        <div className="flex items-center justify-between">
+          <CardTitle className="text-lg font-semibold text-gray-900 dark:text-white">{title}</CardTitle>
+          <div className="w-64 relative">
+            <Input
+              placeholder="Search..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-9 bg-white dark:bg-gray-700 text-gray-900 dark:text-white border-gray-200 dark:border-gray-600"
+            />
+            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500 dark:text-gray-400" />
+          </div>
         </div>
       </CardHeader>
-      <CardContent>
+      <CardContent className="p-0">
         {isLoading ? (
           <div className="flex justify-center items-center py-10">
             <LoadingSpinner size={40} />
           </div>
         ) : (
           <>
-            <div className="rounded-md border">
+            <div className="overflow-x-auto">
               <Table>
                 <TableHeader>
                   <TableRow>
                     {columns.map((column) => (
-                      <TableHead key={column.key}>{column.label}</TableHead>
+                      <TableHead key={column.key} className="whitespace-nowrap">
+                        {column.label}
+                      </TableHead>
                     ))}
                   </TableRow>
                 </TableHeader>
@@ -89,7 +100,11 @@ export function DataTable<T extends DataItem>({ data, columns, isLoading = false
                     paginatedData.map((item, index) => (
                       <TableRow key={index}>
                         {columns.map((column) => (
-                          <TableCell key={`${index}-${column.key}`}>
+                          <TableCell 
+                            key={`${index}-${column.key}`} 
+                            className="break-words"
+                            style={{ maxWidth: column.key === 'body' ? '400px' : 'auto' }}
+                          >
                             {column.render ? column.render(item) : String(item[column.key])}
                           </TableCell>
                         ))}
@@ -97,7 +112,7 @@ export function DataTable<T extends DataItem>({ data, columns, isLoading = false
                     ))
                   ) : (
                     <TableRow>
-                      <TableCell colSpan={columns.length} className="text-center py-8">
+                      <TableCell colSpan={columns.length} className="text-center py-8 text-gray-500 dark:text-gray-400">
                         No data found
                       </TableCell>
                     </TableRow>
@@ -108,24 +123,29 @@ export function DataTable<T extends DataItem>({ data, columns, isLoading = false
 
             {/* Pagination controls */}
             {totalPages > 1 && (
-              <div className="flex items-center justify-end space-x-2 py-4">
-                <button
-                  onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-                  disabled={currentPage === 1}
-                  className="px-3 py-1 rounded border border-gray-300 dark:border-gray-700 disabled:opacity-50"
-                >
-                  Previous
-                </button>
-                <span>
-                  Page {currentPage} of {totalPages}
-                </span>
-                <button
-                  onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-                  disabled={currentPage === totalPages}
-                  className="px-3 py-1 rounded border border-gray-300 dark:border-gray-700 disabled:opacity-50"
-                >
-                  Next
-                </button>
+              <div className="flex items-center justify-between px-4 py-3 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
+                <div className="text-sm text-gray-600 dark:text-gray-400">
+                  Showing <span className="font-medium">{Math.min((currentPage - 1) * itemsPerPage + 1, filteredData.length)}</span> to <span className="font-medium">{Math.min(currentPage * itemsPerPage, filteredData.length)}</span> of <span className="font-medium">{filteredData.length}</span> results
+                </div>
+                <div className="flex items-center space-x-2">
+                  <button
+                    onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                    disabled={currentPage === 1}
+                    className="px-3 py-1 rounded border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 disabled:opacity-50 hover:bg-gray-50 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    Previous
+                  </button>
+                  <span className="text-gray-700 dark:text-gray-300">
+                    Page {currentPage} of {totalPages}
+                  </span>
+                  <button
+                    onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                    disabled={currentPage === totalPages}
+                    className="px-3 py-1 rounded border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 disabled:opacity-50 hover:bg-gray-50 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    Next
+                  </button>
+                </div>
               </div>
             )}
           </>

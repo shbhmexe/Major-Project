@@ -1,179 +1,126 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { DashboardLayout } from '@/components/dashboard-layout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { DashboardLayout } from '@/components/dashboard-layout';
-import { getUserFromToken, isAuthenticated } from '@/lib/auth';
-import { LoadingSpinner } from '@/components/ui/loading-spinner';
-
-// Define user type
-interface UserData {
-  name?: string;
-  email?: string;
-  [key: string]: unknown; // For other potential properties
-}
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { User, MapPin, Briefcase, Calendar } from 'lucide-react';
 
 export default function ProfilePage() {
-  const router = useRouter();
-  const [loading, setLoading] = useState(true);
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    company: '',
-  });
-  const [isSaving, setIsSaving] = useState(false);
-  const [saveMessage, setSaveMessage] = useState('');
+  const [name, setName] = useState('Leanne Graham');
+  const [email, setEmail] = useState('leanne@graham.com');
+  const [location, setLocation] = useState('New York, USA');
+  const [bio, setBio] = useState('Full-stack developer with a passion for creating user-friendly applications.');
+  const [company, setCompany] = useState('Tech Solutions Inc.');
+  const [joinDate] = useState('January 2022');
 
-  useEffect(() => {
-    // Check authentication
-    if (!isAuthenticated()) {
-      router.push('/login');
-      return;
-    }
-
-    // Get user from token
-    const userData = getUserFromToken() as UserData;
-    
-    // Set form data based on user (in a real app, you'd fetch this from an API)
-    setFormData({
-      name: userData?.name || 'John Doe',
-      email: userData?.email || 'user@example.com',
-      phone: '(555) 123-4567',
-      company: 'Acme Inc.',
-    });
-    
-    setLoading(false);
-  }, [router]);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSaveProfile = (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSaving(true);
-    setSaveMessage('');
-    
-    // Simulate API call
-    setTimeout(() => {
-      setIsSaving(false);
-      setSaveMessage('Profile updated successfully!');
-      
-      // Clear message after 3 seconds
-      setTimeout(() => {
-        setSaveMessage('');
-      }, 3000);
-    }, 1000);
+    // In a real app, you would save the profile here
+    alert('Profile saved successfully!');
   };
-
-  if (loading) {
-    return (
-      <DashboardLayout>
-        <div className="flex items-center justify-center h-64">
-          <LoadingSpinner size={40} />
-        </div>
-      </DashboardLayout>
-    );
-  }
 
   return (
     <DashboardLayout>
       <div className="space-y-6">
-        <h1 className="text-3xl font-bold tracking-tight">Profile</h1>
+        <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">Profile</h1>
         
-        <Card>
-          <CardHeader>
-            <CardTitle>User Information</CardTitle>
-            <CardDescription>
-              Update your personal information
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <label htmlFor="name" className="text-sm font-medium">
-                    Full Name
-                  </label>
-                  <Input
-                    id="name"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    disabled={isSaving}
-                  />
+        <div className="grid gap-6 md:grid-cols-3">
+          <div className="md:col-span-1">
+            <Card className="bg-white dark:bg-gray-800 shadow">
+              <CardContent className="p-6">
+                <div className="flex flex-col items-center">
+                  <div className="w-24 h-24 rounded-full bg-gray-300 dark:bg-gray-700 flex items-center justify-center mb-4">
+                    <User className="h-12 w-12 text-gray-500 dark:text-gray-400" />
+                  </div>
+                  <h2 className="text-xl font-bold text-gray-900 dark:text-white">{name}</h2>
+                  <p className="text-gray-500 dark:text-gray-400">{email}</p>
+                  
+                  <div className="mt-6 w-full space-y-3">
+                    <div className="flex items-center">
+                      <MapPin className="h-5 w-5 text-gray-500 dark:text-gray-400 mr-2" />
+                      <span className="text-gray-700 dark:text-gray-300">{location}</span>
+                    </div>
+                    <div className="flex items-center">
+                      <Briefcase className="h-5 w-5 text-gray-500 dark:text-gray-400 mr-2" />
+                      <span className="text-gray-700 dark:text-gray-300">{company}</span>
+                    </div>
+                    <div className="flex items-center">
+                      <Calendar className="h-5 w-5 text-gray-500 dark:text-gray-400 mr-2" />
+                      <span className="text-gray-700 dark:text-gray-300">Joined {joinDate}</span>
+                    </div>
+                  </div>
                 </div>
-                
-                <div className="space-y-2">
-                  <label htmlFor="email" className="text-sm font-medium">
-                    Email
-                  </label>
-                  <Input
-                    id="email"
-                    name="email"
-                    type="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    disabled={isSaving}
-                  />
-                </div>
-                
-                <div className="space-y-2">
-                  <label htmlFor="phone" className="text-sm font-medium">
-                    Phone
-                  </label>
-                  <Input
-                    id="phone"
-                    name="phone"
-                    value={formData.phone}
-                    onChange={handleChange}
-                    disabled={isSaving}
-                  />
-                </div>
-                
-                <div className="space-y-2">
-                  <label htmlFor="company" className="text-sm font-medium">
-                    Company
-                  </label>
-                  <Input
-                    id="company"
-                    name="company"
-                    value={formData.company}
-                    onChange={handleChange}
-                    disabled={isSaving}
-                  />
-                </div>
-              </div>
-              
-              {saveMessage && (
-                <div className="p-3 bg-green-100 text-green-600 rounded-md">
-                  {saveMessage}
-                </div>
-              )}
-              
-              <div className="flex justify-end">
-                <Button type="submit" disabled={isSaving}>
-                  {isSaving ? (
-                    <>
-                      <LoadingSpinner className="mr-2 h-4 w-4" />
-                      Saving...
-                    </>
-                  ) : (
-                    'Save Changes'
-                  )}
-                </Button>
-              </div>
-            </form>
-          </CardContent>
-        </Card>
+              </CardContent>
+            </Card>
+          </div>
+          
+          <div className="md:col-span-2">
+            <Card className="bg-white dark:bg-gray-800 shadow">
+              <CardHeader>
+                <CardTitle className="text-gray-900 dark:text-white">Edit Profile</CardTitle>
+                <CardDescription className="text-gray-500 dark:text-gray-400">
+                  Update your personal information
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <form onSubmit={handleSaveProfile} className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="name" className="text-gray-700 dark:text-gray-300">Full Name</Label>
+                    <Input
+                      id="name"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                    />
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label htmlFor="email" className="text-gray-700 dark:text-gray-300">Email Address</Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                    />
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label htmlFor="location" className="text-gray-700 dark:text-gray-300">Location</Label>
+                    <Input
+                      id="location"
+                      value={location}
+                      onChange={(e) => setLocation(e.target.value)}
+                    />
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label htmlFor="company" className="text-gray-700 dark:text-gray-300">Company</Label>
+                    <Input
+                      id="company"
+                      value={company}
+                      onChange={(e) => setCompany(e.target.value)}
+                    />
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label htmlFor="bio" className="text-gray-700 dark:text-gray-300">Bio</Label>
+                    <Textarea
+                      id="bio"
+                      value={bio}
+                      onChange={(e) => setBio(e.target.value)}
+                      rows={4}
+                    />
+                  </div>
+                  
+                  <Button type="submit">Save Changes</Button>
+                </form>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
       </div>
     </DashboardLayout>
   );

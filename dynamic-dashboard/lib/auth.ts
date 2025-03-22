@@ -1,7 +1,15 @@
-import { jwtDecode } from "jwt-decode";
+import { jwtDecode, JwtPayload } from "jwt-decode";
+
+// Define user interface
+export interface User {
+  email: string;
+  name: string;
+  exp: number;
+  [key: string]: unknown;
+}
 
 // Define token type
-interface DecodedToken {
+interface DecodedToken extends JwtPayload {
   exp: number;
   [key: string]: unknown;
 }
@@ -47,12 +55,19 @@ export const isAuthenticated = () => {
   }
 };
 
-export const getUserFromToken = () => {
+export const getUserFromToken = (): User | null => {
   const token = getToken();
   if (!token) return null;
   
   try {
-    return jwtDecode(token);
+    const decoded = jwtDecode(token) as JwtPayload;
+    // For demo purposes, ensure we always have a name and email
+    return {
+      ...decoded,
+      name: 'Demo User',
+      email: 'user@example.com',
+      exp: (decoded.exp || 0)
+    } as User;
   } catch {
     return null;
   }

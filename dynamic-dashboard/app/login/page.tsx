@@ -2,168 +2,122 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { authApi } from '@/lib/api-service';
 import { setToken } from '@/lib/auth';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { LoadingSpinner } from '@/components/ui/loading-spinner';
-import { Eye, EyeOff } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { EyeIcon, EyeOffIcon } from 'lucide-react';
 
 export default function LoginPage() {
-  const router = useRouter();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-  });
-  const [errors, setErrors] = useState({
-    email: '',
-    password: '',
-  });
-  const [isLoading, setIsLoading] = useState(false);
-  const [apiError, setApiError] = useState('');
-
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
-
-  const validateForm = () => {
-    let valid = true;
-    const newErrors = {
-      email: '',
-      password: '',
-    };
-
-    // Email validation
-    if (!formData.email) {
-      newErrors.email = 'Email is required';
-      valid = false;
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Email format is invalid';
-      valid = false;
-    }
-
-    // Password validation
-    if (!formData.password) {
-      newErrors.password = 'Password is required';
-      valid = false;
-    } else if (formData.password.length < 6) {
-      newErrors.password = 'Password must be at least 6 characters';
-      valid = false;
-    }
-
-    setErrors(newErrors);
-    return valid;
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-    // Clear error when user starts typing
-    if (errors[name as keyof typeof errors]) {
-      setErrors({
-        ...errors,
-        [name]: '',
-      });
-    }
-  };
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setApiError('');
-
-    if (!validateForm()) {
+    
+    if (!email || !password) {
+      setError('Please enter both email and password');
       return;
     }
-
-    setIsLoading(true);
+    
+    setLoading(true);
+    setError('');
+    
     try {
-      const result = await authApi.login(formData.email, formData.password);
-      setToken(result.token);
+      // Simulating authentication - in a real app, call an auth API
+      // For demo, any non-empty email/password works
+      const token = `demo_token_${Date.now()}_${email}`;
+      setToken(token);
       router.push('/dashboard');
-    } catch (error) {
-      console.error('Login error:', error);
-      setApiError('Invalid credentials. Please try again.');
+    } catch (err) {
+      console.error('Login failed:', err);
+      setError('Invalid credentials. Please try again.');
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 p-4">
-      <Card className="w-full max-w-md shadow-lg">
-        <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold text-center">Login</CardTitle>
-          <CardDescription className="text-center">
+    <div className="flex items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-900 p-4">
+      <Card className="w-full max-w-md mx-auto shadow-lg border border-gray-200 dark:border-gray-800">
+        <CardHeader className="space-y-2 text-center pb-6">
+          <CardTitle className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">Dynamic Dashboard</CardTitle>
+          <p className="text-sm text-gray-600 dark:text-gray-400">
             Enter your credentials to access the dashboard
-          </CardDescription>
+          </p>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
+          {error && (
+            <div className="mb-6 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 rounded-md text-sm">
+              {error}
+            </div>
+          )}
+          <form onSubmit={handleSubmit} className="space-y-5">
             <div className="space-y-2">
-              <label htmlFor="email" className="text-sm font-medium">
+              <label 
+                htmlFor="email" 
+                className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+              >
                 Email
               </label>
               <Input
                 id="email"
-                name="email"
                 type="email"
                 placeholder="your@email.com"
-                value={formData.email}
-                onChange={handleChange}
-                disabled={isLoading}
-                className={errors.email ? 'border-red-500' : ''}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700 h-11"
               />
-              {errors.email && (
-                <p className="text-sm text-red-500">{errors.email}</p>
-              )}
             </div>
             <div className="space-y-2">
-              <label htmlFor="password" className="text-sm font-medium">
+              <label 
+                htmlFor="password" 
+                className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+              >
                 Password
               </label>
               <div className="relative">
                 <Input
                   id="password"
-                  name="password"
                   type={showPassword ? "text" : "password"}
                   placeholder="••••••••"
-                  value={formData.password}
-                  onChange={handleChange}
-                  disabled={isLoading}
-                  className={errors.password ? 'border-red-500 pr-10' : 'pr-10'}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  className="bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700 pr-10 h-11"
                 />
                 <button
                   type="button"
-                  className="absolute inset-y-0 right-0 flex items-center px-3 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
-                  onClick={togglePasswordVisibility}
-                  tabIndex={-1}
-                  aria-label={showPassword ? "Hide password" : "Show password"}
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-500"
                 >
-                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  {showPassword ? (
+                    <EyeOffIcon className="h-5 w-5" />
+                  ) : (
+                    <EyeIcon className="h-5 w-5" />
+                  )}
                 </button>
               </div>
-              {errors.password && (
-                <p className="text-sm text-red-500">{errors.password}</p>
-              )}
             </div>
-            {apiError && (
-              <div className="p-3 bg-red-100 text-red-600 rounded-md text-sm">
-                {apiError}
-              </div>
-            )}
-            <Button
-              type="submit"
-              className="w-full"
-              disabled={isLoading}
-            >
-              {isLoading ? <LoadingSpinner className="mr-2" /> : null}
-              {isLoading ? 'Logging in...' : 'Login'}
-            </Button>
+            <div className="pt-2">
+              <Button 
+                type="submit" 
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white h-11 font-medium"
+                disabled={loading}
+              >
+                {loading ? 'Signing in...' : 'Sign In'}
+              </Button>
+            </div>
+            <div className="text-center pt-2">
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                Demo credentials: any email and password
+              </p>
+            </div>
           </form>
         </CardContent>
       </Card>
