@@ -9,7 +9,7 @@ A modern password generator application built with React, Vite, and Tailwind CSS
 - 📋 One-click copy to clipboard
 - 📊 Password strength indicator
 - 🌈 Interactive 3D background elements
-- 🌓 Dark mode support
+- 🌓 Five Different Themes Support
 - 📱 Fully responsive design
 
 ## Getting Started
