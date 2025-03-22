@@ -6,7 +6,7 @@ A beautiful, responsive text translation application built with React, Vite, Tai
 
 - 🌐 Translate text between 10+ languages
 - 🎨 Beautiful, responsive UI with animated transitions
-- 🌓 Light and dark mode toggle
+- 🌓 Five Different Themes 
 - 🔤 Font selector for better readability
 - ✨ Particle animation background
 - 📱 Fully responsive design for all screen sizes
