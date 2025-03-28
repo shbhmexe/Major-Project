@@ -1,0 +1,47 @@
+/* Reset CSS */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body, h1, h2, h3, h4, h5, h6, p, ul, ol {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.5;
+  color: #333;
+  background-color: #f5f5f5;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+}
+
+input, select, button {
+  font: inherit;
+}
+
+/* Main Layout */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Colors */
+:root {
+  --primary-color: #4f46e5;
+  --primary-hover: #4338ca;
+  --danger-color: #dc2626;
+  --danger-hover: #b91c1c;
+  --success-color: #16a34a;
+  --light-bg: #f9fafb;
+  --dark-text: #1f2937;
+  --medium-text: #4b5563;
+  --light-text: #9ca3af;
+  --border-color: #e5e7eb;
+}
