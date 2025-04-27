@@ -121,7 +121,7 @@ export default function Analytics() {
   const stats = [
     { name: 'Total Visits', value: '53,248', change: '+12.5%', isPositive: true },
     { name: 'Conversion Rate', value: '24.3%', change: '+3.2%', isPositive: true },
-    { name: 'Bounce Rate', value: '42.8%', change: '-5.1%', isPositive: true },
+    { name: 'Bounce Rate', value: '42.8%', change: '+5.1%', isPositive: true },
     { name: 'Avg. Session', value: '4m 12s', change: '-0.5%', isPositive: false },
   ];
 
