@@ -26,6 +26,10 @@ const UserSchema = new mongoose.Schema({
     unique: true,
     sparse: true, // Allow null/undefined values (for non-Google users)
   },
+  profilePhoto: {
+    type: String,
+    default: '/default-avatar.png', // Default profile photo path
+  },
   createdAt: {
     type: Date,
     default: Date.now,

@@ -56,7 +56,7 @@ export default function HomePage() {
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-teal-600 dark:text-teal-400 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                 </svg>
-                <span className="text-xl font-bold text-teal-600 dark:text-teal-400">MindfulCare</span>
+                <span className="text-xl font-bold text-teal-600 dark:text-teal-400">Manoध्यान</span>
               </div>
             </div>
             <div className="flex items-center space-x-4">
@@ -97,6 +97,15 @@ export default function HomePage() {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                     </svg>
                     {forumText}
+                  </button>
+                  <button 
+                    onClick={() => router.push('/profile')}
+                    className="flex items-center text-gray-600 dark:text-gray-300 hover:text-teal-600 dark:hover:text-teal-400"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                    {user?.name || profileText}
                   </button>
                   <button 
                     onClick={logout}
@@ -440,7 +449,7 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-3 gap-8 mb-8">
             <div>
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">MindfulCare</h3>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Manoध्यान</h3>
               <p className="text-gray-600 dark:text-gray-400 mb-4">Professional mental health support for students, accessible anytime, anywhere.</p>
               <div className="flex space-x-4">
                 <a href="#" className="text-gray-400 hover:text-teal-500 dark:hover:text-teal-400">
@@ -481,7 +490,7 @@ export default function HomePage() {
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-teal-500 dark:text-teal-400 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
                   </svg>
-                  <span className="text-gray-600 dark:text-gray-400">support@mindfulcare.com</span>
+                  <span className="text-gray-600 dark:text-gray-400">support@Manoध्यान.com</span>
                 </li>
               </ul>
             </div>
@@ -489,7 +498,7 @@ export default function HomePage() {
           
           <div className="border-t border-gray-200 dark:border-gray-700 pt-8">
             <p className="text-gray-500 dark:text-gray-400 text-center">
-              &copy; {new Date().getFullYear()} MindfulCare. All rights reserved.
+              &copy; {new Date().getFullYear()} Manoध्यान. All rights reserved.
             </p>
           </div>
         </div>

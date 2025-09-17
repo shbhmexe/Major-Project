@@ -162,6 +162,7 @@ export function AuthProvider({ children }) {
   const logout = () => {
     setUser(null);
     localStorage.removeItem('mh_user');
+    window.location.href = '/login';
   };
   
   return (

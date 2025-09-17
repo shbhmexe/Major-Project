@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth';
 import { useText } from '@/app/providers';
 import { AnimatedText } from '@/components/AnimatedText';
+import { RecommendationPanel } from '@/components/RecommendationPanel';
 import { cn } from '@/lib/utils';
 
 // Mock resource data
@@ -212,7 +213,7 @@ export default function ResourcesPage() {
                 onClick={() => router.push('/')}
                 className="text-xl font-bold text-blue-600 dark:text-blue-400"
               >
-                MindfulCampus
+                Manoध्यान
               </button>
             </div>
             <div className="flex items-center space-x-4">
@@ -242,6 +243,20 @@ export default function ResourcesPage() {
             delay={0.1}
           />
         </div>
+        
+        {/* Personalized Recommendations Panel */}
+        {!selectedResource && (
+          <div className="mb-8">
+            <RecommendationPanel 
+              onSelectResource={(resourceId) => {
+                const resource = RESOURCES.find(r => r.id === resourceId);
+                if (resource) {
+                  setSelectedResource(resource);
+                }
+              }} 
+            />
+          </div>
+        )}
         
         {!selectedResource ? (
           <>

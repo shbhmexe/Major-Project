@@ -6,60 +6,17 @@ import { useAuth } from '@/lib/auth';
 import { useText } from '@/app/providers';
 import { AnimatedText } from '@/components/AnimatedText';
 import { cn } from '@/lib/utils';
+import { generateGeminiResponse, splitResponseIntoMessages } from '@/lib/gemini';
+import { useConversation } from '@/lib/useConversation';
+import { usePreferences } from '@/lib/usePreferences';
+import { PreferencesPanel } from '@/components/PreferencesPanel';
 
-// Mock AI responses for demonstration
-const AI_RESPONSES = {
-  greeting: [
-    "Hi there! I'm your mental health support assistant. How are you feeling today?",
-    "You can talk about your feelings, ask for coping strategies, or learn about mental health resources.",
-    "Remember, I'm an AI assistant and not a replacement for professional help. If you're in crisis, please contact emergency services or talk to a counselor."
-  ],
-  anxiety: [
-    "It sounds like you might be experiencing anxiety. This is very common among students.",
-    "Deep breathing can help. Try breathing in for 4 counts, holding for 4, and exhaling for 6.",
-    "Would you like to learn more coping strategies for anxiety?"
-  ],
-  stress: [
-    "Academic stress can be overwhelming. Remember that it's okay to take breaks.",
-    "Try breaking down your tasks into smaller, manageable steps.",
-    "Have you tried any relaxation techniques like mindfulness or progressive muscle relaxation?"
-  ],
-  sadness: [
-    "I'm sorry to hear you're feeling down. It's important to acknowledge these feelings.",
-    "Connecting with friends or family can sometimes help when we're feeling sad.",
-    "Would it help to talk about what might be contributing to these feelings?"
-  ],
-  sleep: [
-    "Sleep problems can significantly impact mental health and academic performance.",
-    "Try establishing a consistent sleep schedule and a relaxing bedtime routine.",
-    "Limiting screen time before bed can also help improve sleep quality."
-  ],
-  escalation: [
-    "It sounds like you might benefit from talking to a professional counselor. Would you like me to help you book a session?",
-    "While I'm here to support you, a trained counselor could provide more personalized guidance for what you're experiencing.",
-    "Would you prefer to continue chatting with me, or would you like to explore booking options?"
-  ]
-};
-
-// Function to determine AI response based on message content
-function getAIResponse(message) {
-  const lowerMessage = message.toLowerCase();
-  
-  if (lowerMessage.includes('anxious') || lowerMessage.includes('anxiety') || lowerMessage.includes('worried')) {
-    return AI_RESPONSES.anxiety;
-  } else if (lowerMessage.includes('stress') || lowerMessage.includes('overwhelmed') || lowerMessage.includes('pressure')) {
-    return AI_RESPONSES.stress;
-  } else if (lowerMessage.includes('sad') || lowerMessage.includes('depressed') || lowerMessage.includes('unhappy')) {
-    return AI_RESPONSES.sadness;
-  } else if (lowerMessage.includes('sleep') || lowerMessage.includes('tired') || lowerMessage.includes('insomnia')) {
-    return AI_RESPONSES.sleep;
-  } else if (lowerMessage.includes('suicid') || lowerMessage.includes('harm') || lowerMessage.includes('kill')) {
-    return AI_RESPONSES.escalation;
-  } else {
-    // Default response for messages that don't match specific keywords
-    return ["I'm here to listen. Can you tell me more about how you're feeling?"];
-  }
-}
+// Fallback responses in case the API fails
+const FALLBACK_RESPONSES = [
+  "I'm having trouble connecting right now. Please try again in a moment.",
+  "It seems there's a technical issue. Let me try to help you anyway.",
+  "I apologize for the inconvenience. Our systems are experiencing some delays."
+];
 
 export default function ChatPage() {
   const router = useRouter();
@@ -67,7 +24,22 @@ export default function ChatPage() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  const [isPreferencesPanelOpen, setIsPreferencesPanelOpen] = useState(false);
   const messagesEndRef = useRef(null);
+  
+  // Use conversation hook for persistence
+  const {
+    conversations,
+    currentConversation,
+    loading: conversationLoading,
+    createConversation,
+    addMessages,
+    loadConversation,
+    setCurrentConversation
+  } = useConversation();
+  
+  // Use preferences hook for customization
+  const { preferences } = usePreferences();
   
   // Get text content from text.md
   const chatTitle = useText('ai_chatbot.chat_interface.chat_title', 'AI Support Assistant');
@@ -86,19 +58,38 @@ export default function ChatPage() {
     }
   }, [isAuthenticated, isGuest, router]);
   
-  // Initialize chat with welcome message
+  // Initialize chat with welcome message or load existing conversation
   useEffect(() => {
     if (isAuthenticated || isGuest) {
-      setMessages([
-        {
-          id: 'welcome',
-          type: 'ai',
-          content: welcomeMessage,
-          timestamp: new Date().toISOString(),
-        }
-      ]);
+      // If there are conversations, load the most recent one
+      if (conversations.length > 0 && !currentConversation) {
+        const mostRecentConversation = conversations[0];
+        loadConversation(mostRecentConversation._id);
+      } else if (conversations.length === 0 && !currentConversation) {
+        // If no conversations exist, initialize with welcome message
+        setMessages([
+          {
+            id: 'welcome',
+            type: 'ai',
+            content: welcomeMessage,
+            timestamp: new Date().toISOString(),
+          }
+        ]);
+      }
     }
-  }, [isAuthenticated, isGuest, welcomeMessage]);
+  }, [isAuthenticated, isGuest, welcomeMessage, conversations, currentConversation, loadConversation]);
+  
+  // Update messages when current conversation changes
+  useEffect(() => {
+    if (currentConversation) {
+      setMessages(currentConversation.messages.map(msg => ({
+        id: msg._id || msg.id,
+        type: msg.role,
+        content: msg.content,
+        timestamp: msg.timestamp
+      })));
+    }
+  }, [currentConversation]);
   
   // Scroll to bottom when messages change
   useEffect(() => {
@@ -115,47 +106,125 @@ export default function ChatPage() {
     const userMessage = {
       id: `user-${Date.now()}`,
       type: 'user',
+      role: 'user',
       content: input,
       timestamp: new Date().toISOString(),
     };
     
+    const userInput = input;
     setMessages(prev => [...prev, userMessage]);
     setInput('');
     setIsTyping(true);
     
-    // Simulate AI thinking delay
-    setTimeout(() => {
-      const aiResponses = getAIResponse(input);
+    try {
+      // Get response from Gemini API with user preferences
+      const response = await generateGeminiResponse(userInput, {
+        responseStyle: preferences.aiResponseStyle,
+        customPrompt: preferences.customPrompt
+      });
+      
+      // Split the response into multiple messages if it's too long
+      const aiResponses = splitResponseIntoMessages(response);
+      
+      // Create array to collect all AI responses
+      const allAiMessages = [];
       
       // Add AI responses with staggered timing
-      aiResponses.forEach((response, index) => {
+      aiResponses.forEach((responseContent, index) => {
         setTimeout(() => {
-          setMessages(prev => [...prev, {
+          const aiMessage = {
             id: `ai-${Date.now()}-${index}`,
             type: 'ai',
-            content: response,
+            role: 'ai',
+            content: responseContent,
             timestamp: new Date().toISOString(),
-          }]);
+          };
+          
+          allAiMessages.push(aiMessage);
+          setMessages(prev => [...prev, aiMessage]);
+          
+          // Play sound if enabled
+          if (preferences.soundEnabled && index === 0) {
+            playMessageSound();
+          }
           
           // Set typing to false after last message
           if (index === aiResponses.length - 1) {
             setIsTyping(false);
+            
+            // Save conversation to database
+            saveConversation([userMessage, ...allAiMessages]);
           }
         }, index * 1500); // Stagger responses by 1.5 seconds
       });
-    }, 1000);
+    } catch (error) {
+      console.error('Error getting AI response:', error);
+      
+      // Use a fallback response if the API fails
+      const fallbackResponse = FALLBACK_RESPONSES[Math.floor(Math.random() * FALLBACK_RESPONSES.length)];
+      
+      setTimeout(() => {
+        const aiMessage = {
+          id: `ai-${Date.now()}-fallback`,
+          type: 'ai',
+          role: 'ai',
+          content: fallbackResponse,
+          timestamp: new Date().toISOString(),
+        };
+        
+        setMessages(prev => [...prev, aiMessage]);
+        setIsTyping(false);
+        
+        // Save conversation to database
+        saveConversation([userMessage, aiMessage]);
+      }, 1000);
+    }
+  };
+  
+  // Play message sound
+  const playMessageSound = () => {
+    if (typeof window !== 'undefined' && preferences.soundEnabled) {
+      try {
+        const audio = new Audio('/sounds/message.mp3');
+        audio.volume = 0.5;
+        audio.play().catch(e => console.log('Audio play failed:', e));
+      } catch (error) {
+        console.error('Failed to play sound:', error);
+      }
+    }
+  };
+  
+  // Save conversation to database
+  const saveConversation = async (newMessages) => {
+    try {
+      if (currentConversation) {
+        // Add messages to existing conversation
+        await addMessages(currentConversation._id, newMessages);
+      } else {
+        // Create a new conversation
+        const title = newMessages[0]?.content?.substring(0, 50) + '...' || 'New Conversation';
+        await createConversation(newMessages, title);
+      }
+    } catch (error) {
+      console.error('Error saving conversation:', error);
+    }
   };
   
   // Handle starting a new chat
   const handleNewChat = () => {
-    setMessages([
-      {
-        id: 'welcome',
-        type: 'ai',
-        content: welcomeMessage,
-        timestamp: new Date().toISOString(),
-      }
-    ]);
+    // Clear current conversation
+    setCurrentConversation(null);
+    
+    // Reset messages to welcome message
+    const welcomeMsg = {
+      id: 'welcome',
+      type: 'ai',
+      role: 'ai',
+      content: welcomeMessage,
+      timestamp: new Date().toISOString(),
+    };
+    
+    setMessages([welcomeMsg]);
   };
   
   // If not authenticated and not guest, show nothing while redirecting
@@ -174,10 +243,20 @@ export default function ChatPage() {
                 onClick={() => router.push('/')}
                 className="text-xl font-bold text-blue-600 dark:text-blue-400"
               >
-                MindfulCampus
+                Manoध्यान
               </button>
             </div>
             <div className="flex items-center space-x-4">
+              <button
+                onClick={() => setIsPreferencesPanelOpen(true)}
+                className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400"
+                aria-label="Preferences"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+              </button>
               <button 
                 onClick={() => router.push('/')}
                 className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400"
@@ -199,7 +278,7 @@ export default function ChatPage() {
           </div>
           
           {/* Chat Messages */}
-          <div className="p-4 h-[500px] overflow-y-auto bg-gray-50 dark:bg-gray-900">
+          <div className={`p-4 h-[500px] overflow-y-auto bg-gray-50 dark:bg-gray-900 ${preferences.fontSize === 'small' ? 'text-sm' : preferences.fontSize === 'large' ? 'text-lg' : 'text-base'}`}>
             <div className="space-y-4">
               {messages.map((message) => (
                 <div 
@@ -270,16 +349,45 @@ export default function ChatPage() {
           </div>
           
           {/* Chat Actions */}
-          <div className="p-4 bg-gray-50 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 flex justify-center">
+          <div className="p-4 bg-gray-50 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 flex justify-center space-x-4">
             <button
               onClick={handleNewChat}
               className="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
             >
               {chatRestart}
             </button>
+            
+            {conversations.length > 0 && (
+              <div className="relative inline-block text-left">
+                <select 
+                  className="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                  onChange={(e) => {
+                    if (e.target.value === 'new') {
+                      handleNewChat();
+                    } else {
+                      loadConversation(e.target.value);
+                    }
+                  }}
+                  value={currentConversation?._id || 'new'}
+                >
+                  <option value="new">New Conversation</option>
+                  {conversations.map((conv) => (
+                    <option key={conv._id} value={conv._id}>
+                      {conv.title || 'Untitled Conversation'}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
           </div>
         </div>
       </div>
+      
+      {/* Preferences Panel */}
+      <PreferencesPanel 
+        isOpen={isPreferencesPanelOpen} 
+        onClose={() => setIsPreferencesPanelOpen(false)} 
+      />
     </div>
   );
 }

@@ -70,7 +70,7 @@ export function NextAuthProvider({ children }) {
     setError(null);
     
     try {
-      const result = await signIn('google', { callbackUrl: '/' });
+      const result = await signIn('google', { callbackUrl: '/profile' });
       if (!result?.ok) {
         throw new Error('Failed to sign in with Google');
       }
@@ -86,7 +86,7 @@ export function NextAuthProvider({ children }) {
   // Logout function
   const logout = async () => {
     localStorage.removeItem('mh_user');
-    await signOut({ callbackUrl: '/' });
+    await signOut({ callbackUrl: '/login' });
   };
   
   return (

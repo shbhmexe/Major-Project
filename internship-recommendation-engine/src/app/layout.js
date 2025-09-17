@@ -1,7 +1,7 @@
 import "./globals.css";
 import { metadata } from './metadata';
 import ClientProviders from '@/components/ClientProviders';
-
+import { Analytics } from "@vercel/analytics/next"
 export { metadata };
 
 export default function RootLayout({ children }) {
