@@ -1,11 +1,5 @@
 {
   "framework": "nextjs",
-  "builds": [
-    {
-      "src": "package.json",
-      "use": "@vercel/next"
-    }
-  ],
   "regions": ["bom1"],
   "functions": {
     "app/api/**/*": {
