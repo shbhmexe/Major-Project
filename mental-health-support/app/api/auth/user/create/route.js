@@ -44,13 +44,22 @@ export async function POST(request) {
     sendWelcomeEmail(user.name, user.email)
       .then((result) => {
         if (result.success) {
-          console.log('✅ Welcome email sent successfully to:', user.email, 'MessageID:', result.messageId);
+          console.log('🎉 Welcome email sent successfully!');
+          console.log('📧 Recipient:', user.email);
+          console.log('📬 Message ID:', result.messageId);
+          console.log('🎆 User:', user.name, 'has been welcomed to SukoonU!');
         } else {
-          console.log('⚠️ Welcome email not sent:', result.message);
+          console.log('⚠️ Welcome email could not be sent');
+          console.log('📧 Intended recipient:', user.email);
+          console.log('❌ Reason:', result.message || result.error);
+          console.log('📝 Note: User account created successfully despite email failure');
         }
       })
       .catch((emailError) => {
-        console.error('❌ Failed to send welcome email:', emailError.message || emailError);
+        console.error('🚨 Welcome email system error:');
+        console.error('📧 Intended recipient:', user.email);
+        console.error('❌ Error details:', emailError.message || emailError);
+        console.log('📝 Note: User account created successfully despite email system error');
       });
     
     return NextResponse.json({

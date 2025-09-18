@@ -24,7 +24,7 @@ const createTransporter = () => {
 // Email templates
 const getWelcomeEmailTemplate = (userName, userEmail) => {
   return {
-    subject: 'Welcome to Mental Health Support Platform! 🌟',
+    subject: 'Welcome to SukoonU - Your Mental Health Journey Begins Here! 🌟',
     html: `
       <!DOCTYPE html>
       <html lang="en">
@@ -50,7 +50,7 @@ const getWelcomeEmailTemplate = (userName, userEmail) => {
             overflow: hidden;
           }
           .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%);
             color: white;
             text-align: center;
             padding: 40px 20px;
@@ -93,7 +93,7 @@ const getWelcomeEmailTemplate = (userName, userEmail) => {
           }
           .cta-button {
             display: inline-block;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%);
             color: white;
             padding: 15px 30px;
             text-decoration: none;
@@ -121,23 +121,23 @@ const getWelcomeEmailTemplate = (userName, userEmail) => {
       <body>
         <div class="container">
           <div class="header">
-            <h1>🌟 Welcome to Mental Health Support 🌟</h1>
+            <h1>🌟 Welcome to SukoonU 🌟</h1>
           </div>
           
           <div class="content">
             <div class="welcome-message">
               <p>Dear <strong>${userName}</strong>,</p>
-              <p>Welcome to our Mental Health Support Platform! We're thrilled to have you join our caring community dedicated to supporting mental wellness and personal growth.</p>
+              <p>Welcome to SukoonU! We're thrilled to have you join our caring community dedicated to supporting mental wellness and personal growth. SukoonU is your safe space for mental health support.</p>
             </div>
 
             <div class="features">
-              <h3 style="color: #4a5568; margin-top: 0;">🚀 Here's what you can do on our platform:</h3>
+              <h3 style="color: #4a5568; margin-top: 0;">🚀 Here's what you can do with SukoonU:</h3>
               <ul class="feature-list">
-                <li><strong>AI-Powered Support:</strong> Get personalized mental health insights and recommendations</li>
-                <li><strong>Safe Space:</strong> Share your thoughts and feelings in a judgment-free environment</li>
-                <li><strong>Resource Library:</strong> Access curated mental health resources and exercises</li>
-                <li><strong>Community Support:</strong> Connect with others on similar journeys</li>
-                <li><strong>Progress Tracking:</strong> Monitor your mental wellness journey over time</li>
+                <li><strong>AI Chat Support:</strong> Talk to our AI assistant for immediate support and guidance</li>
+                <li><strong>Educational Resources:</strong> Browse resources and guides on mental health topics in multiple languages</li>
+                <li><strong>Professional Counseling:</strong> Book confidential sessions with qualified counselors</li>
+                <li><strong>Peer Community:</strong> Connect with others in a moderated, supportive environment</li>
+                <li><strong>Safe & Anonymous:</strong> Share your thoughts in a judgment-free environment</li>
                 <li><strong>24/7 Accessibility:</strong> Get support whenever you need it</li>
               </ul>
             </div>
@@ -160,12 +160,12 @@ const getWelcomeEmailTemplate = (userName, userEmail) => {
 
             <p style="color: #718096;">
               Take care of yourself! <span class="emoji">💙</span><br>
-              The Mental Health Support Team
+              The SukoonU Team
             </p>
           </div>
 
           <div class="footer">
-            <p>&copy; 2024 Mental Health Support Platform. Supporting your wellness journey.</p>
+            <p>&copy; ${new Date().getFullYear()} SukoonU. Supporting your mental wellness journey.</p>
             <p style="margin: 10px 0;">
               <span class="emoji">📧</span> You received this email because you created an account with us.
             </p>
@@ -175,18 +175,18 @@ const getWelcomeEmailTemplate = (userName, userEmail) => {
       </html>
     `,
     text: `
-Welcome to Mental Health Support Platform!
+Welcome to SukoonU!
 
 Dear ${userName},
 
-Welcome to our Mental Health Support Platform! We're thrilled to have you join our caring community.
+Welcome to SukoonU! We're thrilled to have you join our caring community dedicated to mental wellness.
 
-Here's what you can do on our platform:
-✓ AI-Powered Support: Get personalized mental health insights
-✓ Safe Space: Share your thoughts in a judgment-free environment
-✓ Resource Library: Access curated mental health resources
-✓ Community Support: Connect with others on similar journeys
-✓ Progress Tracking: Monitor your wellness journey
+Here's what you can do with SukoonU:
+✓ AI Chat Support: Talk to our AI assistant for immediate support
+✓ Educational Resources: Browse mental health resources in multiple languages
+✓ Professional Counseling: Book confidential sessions with qualified counselors
+✓ Peer Community: Connect with others in a supportive environment
+✓ Safe & Anonymous: Share thoughts in a judgment-free space
 ✓ 24/7 Accessibility: Get support whenever you need it
 
 Get started: ${process.env.NEXTAUTH_URL || 'http://localhost:3000'}
@@ -194,7 +194,7 @@ Get started: ${process.env.NEXTAUTH_URL || 'http://localhost:3000'}
 If you have any questions, feel free to reach out!
 
 Take care,
-The Mental Health Support Team
+The SukoonU Team
     `
   };
 };
@@ -213,7 +213,7 @@ export const sendWelcomeEmail = async (userName, userEmail) => {
 
     const mailOptions = {
       from: {
-        name: 'Mental Health Support Platform',
+        name: 'SukoonU Team',
         address: process.env.SMTP_USER
       },
       to: userEmail,

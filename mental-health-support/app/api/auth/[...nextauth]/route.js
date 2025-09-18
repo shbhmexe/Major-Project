@@ -72,7 +72,11 @@ export const authOptions = {
             
             // If user doesn't exist, create them
             if (!data.exists) {
-              await fetch(`${process.env.NEXTAUTH_URL}/api/auth/user/create`, {
+              console.log('🎆 New user signing up with Google!');
+              console.log('👤 Name:', user.name);
+              console.log('📧 Email:', user.email);
+              
+              const createResponse = await fetch(`${process.env.NEXTAUTH_URL}/api/auth/user/create`, {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
@@ -83,6 +87,15 @@ export const authOptions = {
                   googleId: profile.sub || profile.id,
                 }),
               });
+              
+              if (createResponse.ok) {
+                console.log('✅ User creation API called successfully');
+                console.log('📨 Welcome email should be sent automatically');
+              } else {
+                console.error('❌ User creation API failed:', createResponse.status);
+              }
+            } else {
+              console.log('👋 Returning user:', user.name, '(' + user.email + ')');
             }
           }
         } catch (error) {
