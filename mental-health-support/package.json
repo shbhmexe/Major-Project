@@ -7,7 +7,6 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "postbuild": "next-sitemap",
     "analyze": "ANALYZE=true npm run build",
     "clean": "rm -rf .next out",
     "test-email": "node scripts/test-email.js"
