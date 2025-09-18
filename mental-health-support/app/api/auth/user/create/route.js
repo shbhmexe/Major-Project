@@ -1,52 +1,45 @@
 import { NextResponse } from 'next/server';
-import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
 import dbConnect from '@/lib/dbConnect';
 import User from '@/models/User';
 import { sendWelcomeEmail } from '@/lib/email';
 
 export async function POST(request) {
   try {
-    const { name, email, password } = await request.json();
+    const { name, email, googleId } = await request.json();
     
-    // Validate input
-    if (!name || !email || !password) {
+    if (!name || !email) {
       return NextResponse.json(
-        { error: 'Missing required fields' },
+        { error: 'Name and email are required' },
         { status: 400 }
       );
     }
-
+    
     // Connect to database
     await dbConnect();
-
+    
     // Check if user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return NextResponse.json(
-        { error: 'User with this email already exists' },
-        { status: 409 }
-      );
+      return NextResponse.json({
+        success: true,
+        user: {
+          id: existingUser._id,
+          name: existingUser.name,
+          email: existingUser.email,
+        },
+        message: 'User already exists'
+      });
     }
-
-    // Hash password
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
-
-    // Create user
+    
+    // Create new user
     const user = await User.create({
       name,
       email,
-      password: hashedPassword,
+      googleId,
+      provider: 'google',
+      emailVerified: true, // Google emails are already verified
     });
-
-    // Create JWT token
-    const token = jwt.sign(
-      { userId: user._id },
-      process.env.JWT_SECRET,
-      { expiresIn: '7d' }
-    );
-
+    
     // Send welcome email asynchronously (don't block the response)
     sendWelcomeEmail(user.name, user.email)
       .then((result) => {
@@ -59,8 +52,7 @@ export async function POST(request) {
       .catch((emailError) => {
         console.error('❌ Failed to send welcome email:', emailError.message || emailError);
       });
-
-    // Return user data (without password) and token
+    
     return NextResponse.json({
       success: true,
       user: {
@@ -68,12 +60,12 @@ export async function POST(request) {
         name: user.name,
         email: user.email,
       },
-      token,
+      message: 'User created successfully'
     });
   } catch (error) {
-    console.error('Signup error:', error);
+    console.error('Error creating user:', error);
     return NextResponse.json(
-      { error: 'Something went wrong' },
+      { error: 'Internal server error' },
       { status: 500 }
     );
   }

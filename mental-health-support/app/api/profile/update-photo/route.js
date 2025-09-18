@@ -1,12 +1,9 @@
 import { NextResponse } from 'next/server';
-import { writeFile, mkdir } from 'fs/promises';
-import { existsSync } from 'fs';
-import path from 'path';
-import { v4 as uuidv4 } from 'uuid';
 import dbConnect from '../../../../lib/dbConnect';
 import User from '../../../../models/User';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../../auth/[...nextauth]/route';
+import { uploadImage } from '../../../../lib/cloudinary';
 
 export async function POST(request) {
   try {
@@ -28,21 +25,22 @@ export async function POST(request) {
       return NextResponse.json({ error: 'File must be an image' }, { status: 400 });
     }
     
-    // Generate unique filename
-    const buffer = Buffer.from(await file.arrayBuffer());
-    const filename = uuidv4() + path.extname(file.name);
-    const relativePath = `/uploads/${filename}`;
-    const uploadDir = path.join(process.cwd(), 'public/uploads');
+    // Check file size (limit to 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      return NextResponse.json({ error: 'File size must be less than 5MB' }, { status: 400 });
+    }
     
-    // Ensure uploads directory exists
-    try {
-      if (!existsSync(uploadDir)) {
-        await mkdir(uploadDir, { recursive: true });
-      }
-      await writeFile(path.join(uploadDir, filename), buffer);
-    } catch (error) {
-      console.error('Error saving file:', error);
-      return NextResponse.json({ error: 'Error saving file' }, { status: 500 });
+    // Convert file to base64 for Cloudinary upload
+    const buffer = Buffer.from(await file.arrayBuffer());
+    const base64 = `data:${file.type};base64,${buffer.toString('base64')}`;
+    
+    // Upload to Cloudinary
+    const uploadResult = await uploadImage(base64, 'mental-health-support/profile-photos');
+    
+    if (!uploadResult.success) {
+      return NextResponse.json({ 
+        error: 'Failed to upload image: ' + uploadResult.error 
+      }, { status: 500 });
     }
     
     // Update user profile in database
@@ -53,10 +51,25 @@ export async function POST(request) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
     
-    user.profilePhoto = relativePath;
+    // Store the old photo to potentially delete it later
+    const oldProfilePhoto = user.profilePhoto;
+    
+    // Update user with new photo URL
+    user.profilePhoto = uploadResult.url;
+    user.profilePhotoPublicId = uploadResult.publicId;
     await user.save();
     
-    return NextResponse.json({ success: true, profilePhoto: relativePath });
+    // Optional: Delete old photo from Cloudinary if it exists
+    // (You can uncomment this if you want to clean up old photos)
+    // if (oldProfilePhoto && user.profilePhotoPublicId) {
+    //   await deleteImage(user.profilePhotoPublicId);
+    // }
+    
+    return NextResponse.json({ 
+      success: true, 
+      profilePhoto: uploadResult.url,
+      message: 'Profile photo updated successfully'
+    });
   } catch (error) {
     console.error('Error updating profile photo:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });

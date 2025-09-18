@@ -8,6 +8,7 @@ import { useNextAuth } from '@/lib/nextauth';
 import { useText } from '@/app/providers';
 import { AnimatedText } from '@/components/AnimatedText';
 import { cn } from '@/lib/utils';
+import { showToast } from '@/components/ToastProvider';
 
 export default function SignupPage() {
   const router = useRouter();
@@ -39,6 +40,7 @@ export default function SignupPage() {
     // Validate passwords match
     if (password !== confirmPassword) {
       setPasswordError('Passwords do not match');
+      showToast.error('Passwords do not match');
       return;
     }
     
@@ -46,19 +48,55 @@ export default function SignupPage() {
     
     try {
       await signup(name, email, password);
-      router.push('/');
+      showToast.success(`🎉 Welcome ${name}! Your account has been created successfully!`, {
+        autoClose: 6000,
+      });
+      showToast.info('📧 Check your email for a welcome message with platform features!', {
+        autoClose: 8000,
+        delay: 1000
+      });
+      
+      // Delay navigation to show toasts
+      setTimeout(() => {
+        router.push('/');
+      }, 2000);
     } catch (err) {
-      // Error is handled by the auth context
       console.error('Signup failed:', err);
+      showToast.error(err.message || 'Failed to create account. Please try again.');
     }
   };
   
   const handleGoogleLogin = async () => {
     try {
-      await googleLogin();
-      router.push('/');
+      const result = await googleLogin();
+      
+      // Check if the result indicates success
+      if (result && result.ok !== false) {
+        showToast.success('🎉 Welcome! You have successfully signed up with Google!', {
+          autoClose: 5000,
+        });
+        showToast.info('📧 Welcome email sent! Check your inbox for platform features.', {
+          autoClose: 7000,
+          delay: 1000
+        });
+        
+        // Delay navigation to show toasts
+        setTimeout(() => {
+          router.push('/');
+        }, 1500);
+      } else if (result && result.error) {
+        // Only show error if there's an actual error
+        showToast.error('Google signup failed. Please try again.');
+      }
+      // If result is undefined or null, it means OAuth redirect is happening
+      // Don't show any error in this case
     } catch (err) {
-      console.error('Google login failed:', err);
+      // Only show error for genuine failures
+      if (err.message && !err.message.includes('redirect') && !err.message.includes('popup')) {
+        console.error('Google signup error:', err);
+        showToast.error('Google signup failed. Please try again.');
+      }
+      // Ignore redirect and popup related "errors"
     }
   };
   

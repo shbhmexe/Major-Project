@@ -31,7 +31,7 @@ export function NextAuthProvider({ children }) {
     }
   }, [session, status]);
   
-  // Save user to MongoDB if they don't exist
+  // Save user to MongoDB if they don't exist (silently, don't show errors to user)
   const saveUserToDatabase = async (user) => {
     try {
       // Check if user exists first
@@ -43,11 +43,17 @@ export function NextAuthProvider({ children }) {
         body: JSON.stringify({ email: user.email }),
       });
       
+      if (!response.ok) {
+        // Silently fail - don't show error to user
+        console.log('Failed to check user existence, skipping database save');
+        return;
+      }
+      
       const data = await response.json();
       
       // If user doesn't exist, create them
       if (!data.exists) {
-        await fetch('/api/auth/user/create', {
+        const createResponse = await fetch('/api/auth/user/create', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -58,9 +64,16 @@ export function NextAuthProvider({ children }) {
             googleId: user.id,
           }),
         });
+        
+        if (createResponse.ok) {
+          console.log('✅ User saved to database successfully');
+        } else {
+          console.log('⚠️ Failed to save user to database, but continuing...');
+        }
       }
     } catch (err) {
-      console.error('Error saving user to database:', err);
+      // Silently log error but don't show to user
+      console.log('Database operation failed silently:', err.message);
     }
   };
   
@@ -70,14 +83,23 @@ export function NextAuthProvider({ children }) {
     setError(null);
     
     try {
-      const result = await signIn('google', { callbackUrl: '/profile' });
-      if (!result?.ok) {
-        throw new Error('Failed to sign in with Google');
-      }
-      return result;
+      const result = await signIn('google', { 
+        redirect: false, // Don't redirect automatically
+        callbackUrl: '/' 
+      });
+      
+      // For Google OAuth, result might be undefined but that's OK
+      // The session will be updated via the useEffect hook
+      return result || { ok: true };
     } catch (err) {
-      setError(err.message);
-      throw err;
+      // Only set error for actual failures, not OAuth redirects
+      if (err.message && !err.message.includes('redirect')) {
+        console.error('Google login error:', err);
+        setError('Sign in failed. Please try again.');
+        throw err;
+      }
+      // For redirect-related "errors", just return success
+      return { ok: true };
     } finally {
       setLoading(false);
     }

@@ -9,6 +9,7 @@ import { useText } from '@/app/providers';
 import { AnimatedText } from '@/components/AnimatedText';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
+import { showToast } from '@/components/ToastProvider';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -35,28 +36,64 @@ export default function LoginPage() {
     e.preventDefault();
     try {
       await login(email, password);
-      router.push('/');
+      showToast.success('🎉 Welcome back! You have successfully signed in.', {
+        autoClose: 4000,
+      });
+      
+      // Delay navigation to show toast
+      setTimeout(() => {
+        router.push('/');
+      }, 1000);
     } catch (err) {
-      // Error is handled by the auth context
       console.error('Login failed:', err);
+      showToast.error(err.message || 'Login failed. Please check your credentials.');
     }
   };
   
   const handleGuestLogin = async () => {
     try {
       await loginAsGuest();
-      router.push('/');
+      showToast.info('👋 Welcome! You are now browsing as a guest.', {
+        autoClose: 4000,
+      });
+      
+      // Delay navigation to show toast
+      setTimeout(() => {
+        router.push('/');
+      }, 1000);
     } catch (err) {
       console.error('Guest login failed:', err);
+      showToast.error('Guest login failed. Please try again.');
     }
   };
 
   const handleGoogleLogin = async () => {
     try {
-      await googleLogin();
-      router.push('/');
+      const result = await googleLogin();
+      
+      // Check if the result indicates success
+      if (result && result.ok !== false) {
+        showToast.success('🎉 Welcome! You have successfully signed in with Google!', {
+          autoClose: 4000,
+        });
+        
+        // Delay navigation to show toast
+        setTimeout(() => {
+          router.push('/');
+        }, 1000);
+      } else if (result && result.error) {
+        // Only show error if there's an actual error
+        showToast.error('Google login failed. Please try again.');
+      }
+      // If result is undefined or null, it means OAuth redirect is happening
+      // Don't show any error in this case
     } catch (err) {
-      console.error('Google login failed:', err);
+      // Only show error for genuine failures
+      if (err.message && !err.message.includes('redirect') && !err.message.includes('popup')) {
+        console.error('Google login error:', err);
+        showToast.error('Google login failed. Please try again.');
+      }
+      // Ignore redirect and popup related "errors"
     }
   };
   

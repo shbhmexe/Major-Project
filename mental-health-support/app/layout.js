@@ -4,6 +4,7 @@ import { TextContentProvider, AnimationProvider, AuthSessionProvider, LanguagePr
 import { AuthProvider } from "@/lib/auth";
 import { NextAuthProvider } from "@/lib/nextauth";
 import { loadTextContent } from "@/lib/textContent";
+import { ToastProvider } from "@/components/ToastProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -38,7 +39,9 @@ export default async function RootLayout({ children }) {
               <AnimationProvider>
                 <NextAuthProvider>
                   <AuthProvider>
-                    {children}
+                    <ToastProvider>
+                      {children}
+                    </ToastProvider>
                   </AuthProvider>
                 </NextAuthProvider>
               </AnimationProvider>
