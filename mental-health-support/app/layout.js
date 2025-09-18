@@ -19,8 +19,25 @@ const geistMono = Geist_Mono({
 export const metadata = {
   title: "SukoonU - Mental Health Support",
   description: "A safe space for students to seek mental health support, learn coping strategies, and connect with others",
+  manifest: '/manifest.json',
   icons: {
-    icon: '/favicon.svg',
+    icon: [
+      {
+        url: '/favicon.svg',
+        type: 'image/svg+xml',
+      },
+      {
+        url: '/favicon-16x16.svg',
+        sizes: '16x16',
+        type: 'image/svg+xml',
+      },
+    ],
+    shortcut: '/favicon.svg',
+    apple: {
+      url: '/apple-touch-icon.svg',
+      sizes: '180x180',
+      type: 'image/svg+xml',
+    },
   },
 };
 

@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180" fill="none">
+  <!-- Background with rounded corners for iOS -->
+  <rect width="180" height="180" rx="40" fill="#2E3A59"/>
+  
+  <!-- Circular arrows representing connection and empowerment -->
+  <g transform="translate(90, 90)">
+    <!-- Complete circular guide -->
+    <circle cx="0" cy="0" r="45" stroke="#ffffff" stroke-width="6" fill="none" opacity="0.2"/>
+    
+    <!-- Top right curved arrow -->
+    <path d="M 0 -45 A 45 45 0 0 1 31.8 -31.8" stroke="#ffffff" stroke-width="8" fill="none" stroke-linecap="round"/>
+    <polygon points="28,-28 42,-18 28,-18" fill="#ffffff"/>
+    
+    <!-- Bottom left curved arrow -->
+    <path d="M 0 45 A 45 45 0 0 1 -31.8 31.8" stroke="#ffffff" stroke-width="8" fill="none" stroke-linecap="round"/>
+    <polygon points="-28,28 -42,18 -28,18" fill="#ffffff"/>
+  </g>
+  
+  <!-- InternetlishA branding -->
+  <text x="90" y="110" font-family="Georgia, serif" font-size="28" font-weight="bold" text-anchor="middle" fill="#ffffff">I</text>
+  
+  <!-- Subtle connection dots -->
+  <circle cx="90" cy="45" r="3" fill="#ffffff" opacity="0.6"/>
+  <circle cx="135" cy="90" r="3" fill="#ffffff" opacity="0.6"/>
+  <circle cx="90" cy="135" r="3" fill="#ffffff" opacity="0.6"/>
+  <circle cx="45" cy="90" r="3" fill="#ffffff" opacity="0.6"/>
+</svg>

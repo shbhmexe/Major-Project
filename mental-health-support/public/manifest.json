@@ -1,0 +1,27 @@
+{
+  "name": "SukoonU - Mental Health Support",
+  "short_name": "SukoonU",
+  "description": "A safe space for students to seek mental health support, learn coping strategies, and connect with others",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#2E3A59",
+  "theme_color": "#2E3A59",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/favicon-16x16.svg",
+      "sizes": "16x16",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "/apple-touch-icon.svg",
+      "sizes": "180x180",
+      "type": "image/svg+xml"
+    }
+  ]
+}
