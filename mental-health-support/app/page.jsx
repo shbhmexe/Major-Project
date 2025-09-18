@@ -3,7 +3,10 @@
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth';
 import { useText } from '@/app/providers';
+import { useLanguage } from '@/lib/language';
 import { AnimatedText } from '@/components/AnimatedText';
+import { LanguageSwitcher } from '@/components/LanguageSwitcher';
+import { MobileNavigation } from '@/components/MobileNavigation';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import { ShootingStars } from '@/components/ShootingStars';
@@ -13,40 +16,10 @@ export default function HomePage() {
   // Doctor-themed mental health support page
   const router = useRouter();
   const { user, isAuthenticated, isGuest, logout } = useAuth();
-  
-  // Get text content from text.md
-  const heroTitle = useText('home_page.hero_section.hero_title', 'Your Mental Wellbeing Matters');
-  const heroSubtitle = useText('home_page.hero_section.hero_subtitle', 'A safe space for students to seek support, learn coping strategies, and connect with others');
-  const heroCta = useText('home_page.hero_section.hero_cta', 'Explore Resources');
-  
-  const featuresTitle = useText('home_page.features_section.features_title', 'How We Can Help');
-  const feature1Title = useText('home_page.features_section.feature_1_title', 'AI Chat Support');
-  const feature1Desc = useText('home_page.features_section.feature_1_description', 'Talk to our AI assistant for immediate support and guidance');
-  const feature2Title = useText('home_page.features_section.feature_2_title', 'Professional Counseling');
-  const feature2Desc = useText('home_page.features_section.feature_2_description', 'Book confidential sessions with qualified counselors');
-  const feature3Title = useText('home_page.features_section.feature_3_title', 'Educational Resources');
-  const feature3Desc = useText('home_page.features_section.feature_3_description', 'Access videos, articles, and guides on mental health topics');
-  const feature4Title = useText('home_page.features_section.feature_4_title', 'Peer Community');
-  const feature4Desc = useText('home_page.features_section.feature_4_description', 'Connect with others in a moderated, supportive environment');
-  
-  // Navigation text
-  const homeText = useText('general_ui.navigation.home', 'Home');
-  const resourcesText = useText('general_ui.navigation.resources', 'Resources');
-  const chatText = useText('general_ui.navigation.chat', 'AI Chat');
-  const bookingText = useText('general_ui.navigation.booking', 'Book Session');
-  const forumText = useText('general_ui.navigation.forum', 'Peer Support');
-  const profileText = useText('general_ui.navigation.profile', 'My Profile');
-  const loginText = useText('general_ui.navigation.login', 'Login');
-  const signupText = useText('general_ui.navigation.signup', 'Sign Up');
-  
-  // Guest mode text
-  const guestTitle = useText('authentication.guest_mode.guest_title', 'Anonymous Mode');
-  const guestSubtitle = useText('authentication.guest_mode.guest_subtitle', 'You\'re browsing anonymously. Create an account to save your progress.');
-  const guestSignupPrompt = useText('authentication.guest_mode.guest_signup_prompt', 'Ready to create an account?');
-  const guestSignupLink = useText('authentication.guest_mode.guest_signup_link', 'Sign Up Now');
+  const { t } = useLanguage();
   
   return (
-    <div className="min-h-screen bg-gradient-to-br from-teal-50 to-blue-50 dark:from-gray-900 dark:to-gray-800 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-teal-50 to-blue-50 dark:from-gray-900 dark:to-gray-800 relative overflow-x-hidden">
       {/* Navigation - Doctor Themed */}
       <nav className="bg-white dark:bg-gray-800 shadow-md border-b-2 border-teal-100 dark:border-teal-900 relative z-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -56,89 +29,96 @@ export default function HomePage() {
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-teal-600 dark:text-teal-400 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                 </svg>
-                <span className="text-xl font-bold text-teal-600 dark:text-teal-400">Manoध्यान</span>
+                <span className="text-xl font-bold text-teal-600 dark:text-teal-400">{t('appName')}</span>
               </div>
             </div>
             <div className="flex items-center space-x-4">
-              {isAuthenticated ? (
-                <>
-                  <button 
-                    onClick={() => router.push('/chat')}
-                    className="flex items-center text-gray-600 dark:text-gray-300 hover:text-teal-600 dark:hover:text-teal-400"
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
-                    </svg>
-                    {chatText}
-                  </button>
-                  <button 
-                    onClick={() => router.push('/resources')}
-                    className="flex items-center text-gray-600 dark:text-gray-300 hover:text-teal-600 dark:hover:text-teal-400"
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                    </svg>
-                    {resourcesText}
-                  </button>
-                  <button 
-                    onClick={() => router.push('/booking')}
-                    className="flex items-center text-gray-600 dark:text-gray-300 hover:text-teal-600 dark:hover:text-teal-400"
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
-                    {bookingText}
-                  </button>
-                  <button 
-                    onClick={() => router.push('/forum')}
-                    className="flex items-center text-gray-600 dark:text-gray-300 hover:text-teal-600 dark:hover:text-teal-400"
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                    </svg>
-                    {forumText}
-                  </button>
-                  <button 
-                    onClick={() => router.push('/profile')}
-                    className="flex items-center text-gray-600 dark:text-gray-300 hover:text-teal-600 dark:hover:text-teal-400"
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                    </svg>
-                    {user?.name || profileText}
-                  </button>
-                  <button 
-                    onClick={logout}
-                    className="ml-4 px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600 flex items-center"
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                    </svg>
-                    Logout
-                  </button>
-                </>
-              ) : (
-                <>
-                  <button 
-                    onClick={() => router.push('/login')}
-                    className="flex items-center text-gray-600 dark:text-gray-300 hover:text-teal-600 dark:hover:text-teal-400"
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
-                    </svg>
-                    {loginText}
-                  </button>
-                  <button 
-                    onClick={() => router.push('/signup')}
-                    className="ml-2 px-4 py-2 rounded-lg bg-teal-600 text-white hover:bg-teal-700 dark:bg-teal-500 dark:hover:bg-teal-600 flex items-center"
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
-                    </svg>
-                    {signupText}
-                  </button>
-                </>
-              )}
+              {/* Desktop Navigation */}
+              <div className="hidden md:flex items-center space-x-4">
+                {isAuthenticated ? (
+                  <>
+                    <button 
+                      onClick={() => router.push('/chat')}
+                      className="flex items-center text-gray-600 dark:text-gray-300 hover:text-teal-600 dark:hover:text-teal-400"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                      </svg>
+                      {t('chat')}
+                    </button>
+                    <button 
+                      onClick={() => router.push('/resources')}
+                      className="flex items-center text-gray-600 dark:text-gray-300 hover:text-teal-600 dark:hover:text-teal-400"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                      </svg>
+                      {t('resources')}
+                    </button>
+                    <button 
+                      onClick={() => router.push('/booking')}
+                      className="flex items-center text-gray-600 dark:text-gray-300 hover:text-teal-600 dark:hover:text-teal-400"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                      {t('booking')}
+                    </button>
+                    <button 
+                      onClick={() => router.push('/forum')}
+                      className="flex items-center text-gray-600 dark:text-gray-300 hover:text-teal-600 dark:hover:text-teal-400"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                      </svg>
+                      {t('forum')}
+                    </button>
+                    <button 
+                      onClick={() => router.push('/profile')}
+                      className="flex items-center text-gray-600 dark:text-gray-300 hover:text-teal-600 dark:hover:text-teal-400"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                      </svg>
+                      {user?.name || t('profile')}
+                    </button>
+                    <button 
+                      onClick={logout}
+                      className="ml-4 px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600 flex items-center"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                      </svg>
+                      {t('logout')}
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <button 
+                      onClick={() => router.push('/login')}
+                      className="flex items-center text-gray-600 dark:text-gray-300 hover:text-teal-600 dark:hover:text-teal-400"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+                      </svg>
+                      {t('login')}
+                    </button>
+                    <button 
+                      onClick={() => router.push('/signup')}
+                      className="ml-2 px-4 py-2 rounded-lg bg-teal-600 text-white hover:bg-teal-700 dark:bg-teal-500 dark:hover:bg-teal-600 flex items-center"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+                      </svg>
+                      {t('signup')}
+                    </button>
+                  </>
+                )}
+                <LanguageSwitcher />
+              </div>
+              
+              {/* Mobile Navigation */}
+              <MobileNavigation />
             </div>
           </div>
         </div>
@@ -154,8 +134,8 @@ export default function HomePage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
                 <div>
-                  <h3 className="text-sm font-medium text-teal-800 dark:text-teal-200">{guestTitle}</h3>
-                  <p className="text-xs text-teal-700 dark:text-teal-300 mt-0.5">{guestSubtitle}</p>
+                  <h3 className="text-sm font-medium text-teal-800 dark:text-teal-200">{t('anonymousMode')}</h3>
+                  <p className="text-xs text-teal-700 dark:text-teal-300 mt-0.5">{t('browssingAnonymously')}</p>
                 </div>
               </div>
               <button 
@@ -165,7 +145,7 @@ export default function HomePage() {
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
                 </svg>
-                {guestSignupLink}
+                {t('signUpNow')}
               </button>
             </div>
           </div>
@@ -184,12 +164,12 @@ export default function HomePage() {
               Professional Mental Health Support
             </div>
             <AnimatedText 
-              text={heroTitle} 
+              text={t('heroTitle')} 
               className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white" 
               duration={0.7}
             />
             <p className="mt-6 max-w-2xl text-xl text-gray-600 dark:text-gray-300">
-              {heroSubtitle}
+              {t('heroSubtitle')}
             </p>
             <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
               <button 
@@ -199,7 +179,7 @@ export default function HomePage() {
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                 </svg>
-                {heroCta}
+                {t('exploreResources')}
               </button>
               <button 
                 onClick={() => router.push('/chat')}
@@ -208,7 +188,7 @@ export default function HomePage() {
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
                 </svg>
-                Talk to AI Assistant
+                {t('talkToAI')}
               </button>
             </div>
             <div className="mt-8 flex items-center justify-center md:justify-start">
@@ -277,7 +257,7 @@ export default function HomePage() {
               Professional Care Features
             </span>
             <AnimatedText 
-              text={featuresTitle} 
+              text={t('featuresTitle')} 
               className="text-3xl font-bold text-gray-900 dark:text-white" 
             />
             <div className="w-24 h-1 bg-teal-500 rounded-full mt-6"></div>
@@ -291,8 +271,8 @@ export default function HomePage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">{feature1Title}</h3>
-              <p className="text-gray-600 dark:text-gray-300 mb-4">{feature1Desc}</p>
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">{t('feature1Title')}</h3>
+              <p className="text-gray-600 dark:text-gray-300 mb-4">{t('feature1Desc')}</p>
               <div className="pt-2 border-t border-gray-100 dark:border-gray-700">
                 <button onClick={() => router.push('/chat')} className="inline-flex items-center text-sm font-medium text-teal-600 dark:text-teal-400 hover:text-teal-700 dark:hover:text-teal-300">
                   Try AI Chat
@@ -310,8 +290,8 @@ export default function HomePage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                 </svg>
               </div>
-              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">{feature2Title}</h3>
-              <p className="text-gray-600 dark:text-gray-300 mb-4">{feature2Desc}</p>
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">{t('feature2Title')}</h3>
+              <p className="text-gray-600 dark:text-gray-300 mb-4">{t('feature2Desc')}</p>
               <div className="pt-2 border-t border-gray-100 dark:border-gray-700">
                 <button onClick={() => router.push('/resources')} className="inline-flex items-center text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300">
                   Browse Resources
@@ -329,8 +309,8 @@ export default function HomePage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">{feature3Title}</h3>
-              <p className="text-gray-600 dark:text-gray-300 mb-4">{feature3Desc}</p>
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">{t('feature3Title')}</h3>
+              <p className="text-gray-600 dark:text-gray-300 mb-4">{t('feature3Desc')}</p>
               <div className="pt-2 border-t border-gray-100 dark:border-gray-700">
                 <button onClick={() => router.push('/booking')} className="inline-flex items-center text-sm font-medium text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300">
                   Book Appointment
@@ -348,8 +328,8 @@ export default function HomePage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">{feature4Title}</h3>
-              <p className="text-gray-600 dark:text-gray-300 mb-4">{feature4Desc}</p>
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">{t('feature4Title')}</h3>
+              <p className="text-gray-600 dark:text-gray-300 mb-4">{t('feature4Desc')}</p>
               <div className="pt-2 border-t border-gray-100 dark:border-gray-700">
                 <button onClick={() => router.push('/forum')} className="inline-flex items-center text-sm font-medium text-amber-600 dark:text-amber-400 hover:text-amber-700 dark:hover:text-amber-300">
                   Join Forum

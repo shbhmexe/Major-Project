@@ -69,6 +69,13 @@ export function AuthProvider({ children }) {
           isGuest: false,
         };
         
+        // Load profile photo from history if available
+        const photoHistory = JSON.parse(localStorage.getItem('mh_photo_history') || '{}');
+        const userKey = safeUser.email || safeUser.id;
+        if (photoHistory[userKey]) {
+          safeUser.profilePhoto = photoHistory[userKey];
+        }
+        
         // Store in state and localStorage
         setUser(safeUser);
         localStorage.setItem('mh_user', JSON.stringify(safeUser));
@@ -117,6 +124,13 @@ export function AuthProvider({ children }) {
         isGuest: false,
       };
       
+      // Load profile photo from history if available
+      const photoHistory = JSON.parse(localStorage.getItem('mh_photo_history') || '{}');
+      const userKey = safeUser.email || safeUser.id;
+      if (photoHistory[userKey]) {
+        safeUser.profilePhoto = photoHistory[userKey];
+      }
+      
       // Store in state and localStorage
       setUser(safeUser);
       localStorage.setItem('mh_user', JSON.stringify(safeUser));
@@ -146,6 +160,12 @@ export function AuthProvider({ children }) {
         isGuest: true,
       };
       
+      // Load profile photo from history for anonymous user
+      const photoHistory = JSON.parse(localStorage.getItem('mh_photo_history') || '{}');
+      if (photoHistory['anonymous']) {
+        guestUser.profilePhoto = photoHistory['anonymous'];
+      }
+      
       // Store in state and localStorage
       setUser(guestUser);
       localStorage.setItem('mh_user', JSON.stringify(guestUser));
@@ -162,7 +182,7 @@ export function AuthProvider({ children }) {
   const logout = () => {
     setUser(null);
     localStorage.removeItem('mh_user');
-    window.location.href = '/login';
+    window.location.href = '/';
   };
   
   return (

@@ -35,7 +35,7 @@ export default function LoginPage() {
     e.preventDefault();
     try {
       await login(email, password);
-      router.push('/profile');
+      router.push('/');
     } catch (err) {
       // Error is handled by the auth context
       console.error('Login failed:', err);
@@ -45,7 +45,7 @@ export default function LoginPage() {
   const handleGuestLogin = async () => {
     try {
       await loginAsGuest();
-      router.push('/profile');
+      router.push('/');
     } catch (err) {
       console.error('Guest login failed:', err);
     }
@@ -54,7 +54,7 @@ export default function LoginPage() {
   const handleGoogleLogin = async () => {
     try {
       await googleLogin();
-      router.push('/profile');
+      router.push('/');
     } catch (err) {
       console.error('Google login failed:', err);
     }

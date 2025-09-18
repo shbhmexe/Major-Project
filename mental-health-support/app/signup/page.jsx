@@ -46,7 +46,7 @@ export default function SignupPage() {
     
     try {
       await signup(name, email, password);
-      router.push('/profile');
+      router.push('/');
     } catch (err) {
       // Error is handled by the auth context
       console.error('Signup failed:', err);
@@ -56,7 +56,7 @@ export default function SignupPage() {
   const handleGoogleLogin = async () => {
     try {
       await googleLogin();
-      router.push('/profile');
+      router.push('/');
     } catch (err) {
       console.error('Google login failed:', err);
     }

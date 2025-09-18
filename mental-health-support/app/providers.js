@@ -3,6 +3,7 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { setTextContent } from '@/lib/textContent';
 import { SessionProvider } from 'next-auth/react';
+import { LanguageProvider } from '@/lib/language';
 
 // Create a context for text content
 const TextContentContext = createContext({});
@@ -85,3 +86,11 @@ export function useAnimationPreference() {
 export function AuthSessionProvider({ children }) {
   return <SessionProvider>{children}</SessionProvider>;
 }
+
+// Language Provider wrapper
+export function LanguageProviderWrapper({ children }) {
+  return <LanguageProvider>{children}</LanguageProvider>;
+}
+
+// Export LanguageProvider directly
+export { LanguageProvider };

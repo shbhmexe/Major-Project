@@ -1,11 +1,12 @@
 import { NextResponse } from 'next/server';
-import { writeFile } from 'fs/promises';
+import { writeFile, mkdir } from 'fs/promises';
+import { existsSync } from 'fs';
 import path from 'path';
 import { v4 as uuidv4 } from 'uuid';
 import dbConnect from '../../../../lib/dbConnect';
 import User from '../../../../models/User';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '../../../../lib/nextauth';
+import { authOptions } from '../../auth/[...nextauth]/route';
 
 export async function POST(request) {
   try {
@@ -35,6 +36,9 @@ export async function POST(request) {
     
     // Ensure uploads directory exists
     try {
+      if (!existsSync(uploadDir)) {
+        await mkdir(uploadDir, { recursive: true });
+      }
       await writeFile(path.join(uploadDir, filename), buffer);
     } catch (error) {
       console.error('Error saving file:', error);
