@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "Manoध्यान - Mental Health Support",
+  title: "SukoonU - Mental Health Support",
   description: "A safe space for students to seek mental health support, learn coping strategies, and connect with others",
   icons: {
     icon: '/favicon.svg',

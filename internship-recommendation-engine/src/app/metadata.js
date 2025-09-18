@@ -1,6 +1,6 @@
 export const metadata = {
-  title: "AI Internship Recommendation Engine | PM Internship Scheme",
-  description: "Find your perfect internship opportunity through our AI-powered recommendation system. Built for rural and emerging talent under the PM Internship Scheme.",
-  keywords: "internships, PM scheme, AI recommendations, rural talent, government internships, India",
+  title: "Interndisha - AI Internship Recommendation Engine",
+  description: "Find your perfect internship opportunity through our AI-powered recommendation system. Interndisha empowers rural and emerging talent with personalized internship matches.",
+  keywords: "internships, Interndisha, AI recommendations, rural talent, government internships, India, career development",
   authors: [{ name: "Government of India" }],
 };

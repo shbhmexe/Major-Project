@@ -429,7 +429,7 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-3 gap-8 mb-8">
             <div>
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Manoध्यान</h3>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">SukoonU</h3>
               <p className="text-gray-600 dark:text-gray-400 mb-4">Professional mental health support for students, accessible anytime, anywhere.</p>
               <div className="flex space-x-4">
                 <a href="#" className="text-gray-400 hover:text-teal-500 dark:hover:text-teal-400">
@@ -470,7 +470,7 @@ export default function HomePage() {
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-teal-500 dark:text-teal-400 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
                   </svg>
-                  <span className="text-gray-600 dark:text-gray-400">support@Manoध्यान.com</span>
+                  <span className="text-gray-600 dark:text-gray-400">support@SukoonU.com</span>
                 </li>
               </ul>
             </div>
@@ -478,7 +478,7 @@ export default function HomePage() {
           
           <div className="border-t border-gray-200 dark:border-gray-700 pt-8">
             <p className="text-gray-500 dark:text-gray-400 text-center">
-              &copy; {new Date().getFullYear()} Manoध्यान. All rights reserved.
+              &copy; {new Date().getFullYear()} SukoonU. All rights reserved.
             </p>
           </div>
         </div>

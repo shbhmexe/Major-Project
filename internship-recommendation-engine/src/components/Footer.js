@@ -30,7 +30,7 @@ export default function Footer({ language }) {
                 <div className="w-6 h-6 bg-white rounded-full"></div>
               </div>
               <div>
-                <div className="text-xl font-bold text-white">PM Internship AI</div>
+                <div className="text-xl font-bold text-white">Interndisha</div>
                 <div className="text-sm text-gray-400">Recommendation Engine</div>
               </div>
             </div>

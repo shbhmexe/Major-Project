@@ -346,7 +346,7 @@ export default function ForumPage() {
                 onClick={() => router.push('/')}
                 className="text-xl font-bold text-blue-600 dark:text-blue-400"
               >
-                Manoध्यान
+                SukoonU
               </button>
             </div>
             <div className="flex items-center space-x-4">

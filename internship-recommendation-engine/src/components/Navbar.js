@@ -73,7 +73,7 @@ export default function Navbar({ language, setLanguage }) {
           {/* Logo */}
           <div className="flex-shrink-0">
             <div className="text-xl font-bold text-white">
-              PM Internship AI
+              Interndisha
             </div>
           </div>
 

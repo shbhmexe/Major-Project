@@ -18,7 +18,7 @@ const translations = {
     backToHome: 'Back to Home',
     
     // Home page
-    appName: 'Manoध्यान',
+    appName: 'SukoonU',
     heroTitle: 'Your Mental Wellbeing Matters',
     heroSubtitle: 'A safe space for students to seek support, learn coping strategies, and connect with others',
     exploreResources: 'Explore Resources',
@@ -74,7 +74,7 @@ const translations = {
     backToHome: 'होम पर वापस',
     
     // Home page
-    appName: 'Manoध्यान',
+    appName: 'SukoonU',
     heroTitle: 'आपका मानसिक स्वास्थ्य महत्वपूर्ण है',
     heroSubtitle: 'छात्रों के लिए सहायता लेने, सामना करने की रणनीति सीखने और दूसरों से जुड़ने के लिए एक सुरक्षित स्थान',
     exploreResources: 'संसाधन देखें',
@@ -130,7 +130,7 @@ const translations = {
     backToHome: 'முகப்புக்கு திரும்பு',
     
     // Home page
-    appName: 'Manoध्यान',
+    appName: 'SukoonU',
     heroTitle: 'உங்கள் மன நலம் முக்கியமானது',
     heroSubtitle: 'மாணவர்கள் ஆதரவு பெற, சமாளிக்கும் உத்திகளை கற்றுக்கொள்ள மற்றும் பிறருடன் இணைவதற்கான பாதுகாப்பான இடம்',
     exploreResources: 'வளங்களை ஆராயுங்கள்',
@@ -181,7 +181,7 @@ const translations = {
     backToHome: 'ಮುಖ್ಯಕ್ಕೆ ಹಿಂತಿರುಗಿ',
     
     // Home page
-    appName: 'Manoध्यान',
+    appName: 'SukoonU',
     heroTitle: 'ನಿಮ್ಮ ಮಾನಸಿಕ ಯೋಗಕ್ಷೇಮ ಮುಖ್ಯ',
     heroSubtitle: 'ವಿದ್ಯಾರ್ಥಿಗಳು ಬೆಂಬಲ ಪಡೆಯಲು, ನಿಭಾಯಿಸುವ ತಂತ್ರಗಳನ್ನು ಕಲಿಯಲು ಮತ್ತು ಇತರರೊಂದಿಗೆ ಸಂಪರ್ಕ ಸಾಧಿಸಲು ಸುರಕ್ಷಿತ ಸ್ಥಳ',
     exploreResources: 'ಸಂಪನ್ಮೂಲಗಳನ್ನು ಅನ್ವೇಷಿಸಿ',
@@ -232,7 +232,7 @@ const translations = {
     backToHome: 'ہوم واپس',
     
     // Home page
-    appName: 'Manoध्यान',
+    appName: 'SukoonU',
     heroTitle: 'آپ کی ذہنی صحت اہم ہے',
     heroSubtitle: 'طلباء کے لیے مدد حاصل کرنے، نپٹنے کی حکمت عملیوں کو سیکھنے اور دوسروں سے جڑنے کے لیے محفوظ جگہ',
     exploreResources: 'وسائل دیکھیں',
@@ -283,7 +283,7 @@ const translations = {
     backToHome: 'হোমে ফিরুন',
     
     // Home page
-    appName: 'Manoध्यान',
+    appName: 'SukoonU',
     heroTitle: 'আপনার মানসিক স্বাস্থ্য গুরুত্বপূর্ণ',
     heroSubtitle: 'শিক্ষার্থীদের জন্য সাহায্য পেতে, মোকাবেলার কৌশল শিখতে এবং অন্যদের সাথে সংযোগ করার জন্য নিরাপদ স্থান',
     exploreResources: 'রিসোর্স দেখুন',
@@ -334,7 +334,7 @@ const translations = {
     backToHome: 'होमवर परत',
     
     // Home page
-    appName: 'Manoध्यान',
+    appName: 'SukoonU',
     heroTitle: 'तुमचे मानसिक आरोग्य महत्वाचे आहे',
     heroSubtitle: 'विद्यार्थ्यांना मदत मिळवण्यासाठी, सामना करण्याच्या धोरणे शिकण्यासाठी आणि इतरांशी जोडणी करण्यासाठी सुरक्षित जागा',
     exploreResources: 'संसाधने पहा',
