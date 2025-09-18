@@ -1,15 +1,21 @@
 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect width="16" height="16" rx="4" fill="url(#gradient)"/>
-  <defs>
-    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#8b5cf6;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:1" />
-    </linearGradient>
-  </defs>
-  <!-- Letter "I" for Interndisha -->
-  <rect x="6" y="4" width="3" height="8" fill="white" rx="0.5"/>
-  <rect x="5" y="4" width="6" height="1.5" fill="white" rx="0.5"/>
-  <rect x="5" y="10.5" width="6" height="1.5" fill="white" rx="0.5"/>
-  <!-- Small dot representing AI/tech -->
-  <circle cx="12" cy="5" r="1" fill="#fbbf24"/>
+  <!-- Background -->
+  <rect width="16" height="16" rx="3" fill="white"/>
+  
+  <!-- Simplified circular arrows for small size -->
+  <path d="M8 2 C11.314 2 14 4.686 14 8 C14 9.6 13.4 11.05 12.4 12.1" 
+        stroke="#2c3e94" stroke-width="1" fill="none" stroke-linecap="round"/>
+  <!-- Arrow head top -->
+  <path d="M13 10 L12.4 12.1 L14 11.5" fill="#2c3e94"/>
+  
+  <!-- Bottom circular arrow -->
+  <path d="M8 14 C4.686 14 2 11.314 2 8 C2 6.4 2.6 4.95 3.6 3.9" 
+        stroke="#2c3e94" stroke-width="1" fill="none" stroke-linecap="round"/>
+  <!-- Arrow head bottom -->
+  <path d="M3 6 L3.6 3.9 L2 4.5" fill="#2c3e94"/>
+  
+  <!-- Letter "I" in the center -->
+  <rect x="7" y="5" width="2" height="6" fill="#2c3e94" rx="0.5"/>
+  <rect x="6" y="5" width="4" height="1" fill="#2c3e94" rx="0.5"/>
+  <rect x="6" y="10" width="4" height="1" fill="#2c3e94" rx="0.5"/>
 </svg>
