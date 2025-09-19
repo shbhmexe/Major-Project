@@ -58,7 +58,19 @@ const translations = {
     // Guest Mode
     anonymousMode: 'Anonymous Mode',
     browssingAnonymously: 'You\'re browsing anonymously. Create an account to save your progress.',
-    signUpNow: 'Sign Up Now'
+    signUpNow: 'Sign Up Now',
+    
+    // Emergency SOS
+    emergencySOS: 'Emergency SOS',
+    emergencySOSTooltip: 'Emergency Mental Health Helpline - Click to call Kiran Helpline',
+    emergencySOSAriaLabel: 'Emergency SOS - Call mental health helpline immediately',
+    emergencyCallTitle: 'Emergency Mental Health Call',
+    emergencyCallSubtitle: 'You\'re about to call the Kiran Helpline',
+    kiranHelplineTitle: 'Kiran Mental Health Helpline',
+    emergencyCallDescription: 'This will open your phone\'s dialer with the Kiran Helpline number (1800-599-0019) pre-filled. This is India\'s free national mental health helpline available 24/7.',
+    emergencyCallNote: 'This is a toll-free service. You will not be charged for this call.',
+    callNow: 'Call Now',
+    cancel: 'Cancel'
   },
   hi: {
     // Navigation
@@ -114,7 +126,19 @@ const translations = {
     // Guest Mode
     anonymousMode: 'गुमनाम मोड',
     browssingAnonymously: 'आप गुमनाम रूप से ब्राउज़ कर रहे हैं। अपनी प्रगति सहेजने के लिए खाता बनाएं।',
-    signUpNow: 'अभी साइन अप करें'
+    signUpNow: 'अभी साइन अप करें',
+    
+    // Emergency SOS
+    emergencySOS: 'आपातकालीन SOS',
+    emergencySOSTooltip: 'आपातकालीन मानसिक स्वास्थ्य हेल्पलाइन - किरण हेल्पलाइन पर कॉल करने के लिए क्लिक करें',
+    emergencySOSAriaLabel: 'आपातकालीन SOS - मानसिक स्वास्थ्य हेल्पलाइन पर तुरंत कॉल करें',
+    emergencyCallTitle: 'आपातकालीन मानसिक स्वास्थ्य कॉल',
+    emergencyCallSubtitle: 'आप किरण हेल्पलाइन पर कॉल करने वाले हैं',
+    kiranHelplineTitle: 'किरण मानसिक स्वास्थ्य हेल्पलाइन',
+    emergencyCallDescription: 'यह आपके फोन के डायलर को किरण हेल्पलाइन नंबर (1800-599-0019) के साथ खोलेगा। यह भारत की नि:शुल्क राष्ट्रीय मानसिक स्वास्थ्य हेल्पलाइन है जो 24/7 उपलब्ध है।',
+    emergencyCallNote: 'यह एक टोल-फ्री सेवा है। इस कॉल के लिए आपसे कोई शुल्क नहीं लिया जाएगा।',
+    callNow: 'अभी कॉल करें',
+    cancel: 'रद्द करें'
   },
   ta: {
     // Navigation
@@ -165,7 +189,19 @@ const translations = {
     
     // Language
     language: 'மொழி',
-    selectLanguage: 'மொழியைத் தேர்ந்தெடுக்கவும்'
+    selectLanguage: 'மொழியைத் தேர்ந்தெடுக்கவும்',
+    
+    // Emergency SOS
+    emergencySOS: 'அவசர SOS',
+    emergencySOSTooltip: 'அவசர மன நலம் உதவி எண் - கிரண் உதவி எண்ணிற்கு அழைக்க கிளிக் செய்யவும்',
+    emergencySOSAriaLabel: 'அவசர SOS - மன நல உதவி எண்ணிற்கு உடனடியாக அழைக்கவும்',
+    emergencyCallTitle: 'அவசர மன நல அழைப்பு',
+    emergencyCallSubtitle: 'நீங்கள் கிரண் உதவி எண்ணிற்கு அழைக்க உள்ளீர்கள்',
+    kiranHelplineTitle: 'கிரண் மன நல உதவி எண்',
+    emergencyCallDescription: 'இது உங்கள் தொலைபேசியின் டயலரை கிரண் உதவி எண் (1800-599-0019) உடன் திறக்கும். இது இந்தியாவின் இலவச தேசிய மன நல உதவி எண் ஆகும், இது 24/7 கிடைக்கும்.',
+    emergencyCallNote: 'இது ஒரு கட்டணம் இல்லாத சேவையாகும். இந்த அழைப்புக்கு உங்களிடமிருந்து கட்டணம் வசூலிக்கப்படாது.',
+    callNow: 'இப்போது அழைக்கவும்',
+    cancel: 'ரத்து செய்யவும்'
   },
   kn: {
     // Navigation

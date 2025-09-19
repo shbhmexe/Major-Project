@@ -1,7 +1,7 @@
 export const metadata = {
-  title: "InterncliShA - AI Internship Recommendation Engine",
-  description: "Find your perfect internship opportunity through our AI-powered recommendation system. InterncliShA empowers connections between talent and opportunities with personalized internship matches.",
-  keywords: "internships, InterncliShA, AI recommendations, rural talent, government internships, India, career development, empowering connections",
+  title: "Interndisha - AI Internship Recommendation Engine",
+  description: "Find your perfect internship opportunity through our AI-powered recommendation system. Interndisha empowers connections between talent and opportunities with personalized internship matches.",
+  keywords: "internships, Interndisha, AI recommendations, rural talent, government internships, India, career development, empowering connections",
   authors: [{ name: "Government of India" }],
   icons: {
     icon: [

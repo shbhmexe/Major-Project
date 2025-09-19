@@ -200,3 +200,23 @@
 - voice_assist_label: Voice Assistant
 - voice_assist_on: Enable
 - voice_assist_off: Disable
+
+## Emergency SOS
+
+### SOS Button
+- emergencySOS: Emergency SOS
+- emergencySOSTooltip: Emergency Mental Health Helpline - Click to call Kiran Helpline
+- emergencySOSAriaLabel: Emergency SOS - Call mental health helpline immediately
+
+### Confirmation Modal
+- emergencyCallTitle: Emergency Mental Health Call
+- emergencyCallSubtitle: You're about to call the Kiran Helpline
+- kiranHelplineTitle: Kiran Mental Health Helpline
+- emergencyCallDescription: This will open your phone's dialer with the Kiran Helpline number (1800-599-0019) pre-filled. This is India's free national mental health helpline available 24/7.
+- emergencyCallNote: This is a toll-free service. You will not be charged for this call.
+- callNow: Call Now
+- cancel: Cancel
+
+### General
+- appName: SukoonU
+- logout: Logout

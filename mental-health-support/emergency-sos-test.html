@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emergency SOS Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .sos-button {
+            background-color: #dc2626;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s;
+        }
+        .sos-button:hover {
+            background-color: #b91c1c;
+            transform: scale(1.05);
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+        .modal-content {
+            background-color: white;
+            margin: 15% auto;
+            padding: 20px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 400px;
+            text-align: center;
+        }
+        .modal-buttons {
+            margin-top: 20px;
+        }
+        .modal-buttons button {
+            margin: 0 10px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .call-btn {
+            background-color: #dc2626;
+            color: white;
+        }
+        .cancel-btn {
+            background-color: #6b7280;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h1>Emergency SOS Test</h1>
+    <p>This is a test to verify that the Emergency SOS functionality works correctly on both desktop and mobile platforms.</p>
+    
+    <h2>Test Features:</h2>
+    <ul>
+        <li>Click the Emergency SOS button below</li>
+        <li>A confirmation modal should appear</li>
+        <li>Clicking "Call Now" should open the dialer with 1800-599-0019</li>
+        <li>The tel: protocol should work on both web and mobile browsers</li>
+    </ul>
+
+    <button class="sos-button" onclick="showModal()">🚨 Emergency SOS</button>
+
+    <!-- Modal -->
+    <div id="confirmModal" class="modal">
+        <div class="modal-content">
+            <h3>Emergency Mental Health Call</h3>
+            <p>You're about to call the Kiran Helpline</p>
+            <div style="background-color: #fef2f2; padding: 15px; border-radius: 8px; margin: 15px 0; border: 1px solid #fecaca;">
+                <h4 style="color: #991b1b; margin: 0 0 5px 0;">❤️ Kiran Mental Health Helpline</h4>
+                <p style="color: #991b1b; margin: 0; font-weight: bold;">1800-599-0019</p>
+            </div>
+            <p style="font-size: 14px; color: #6b7280;">
+                This will open your phone's dialer with the Kiran Helpline number (1800-599-0019) pre-filled. 
+                This is India's free national mental health helpline available 24/7.
+            </p>
+            <p style="font-size: 12px; color: #9ca3af; background-color: #f9fafb; padding: 8px; border-radius: 4px;">
+                This is a toll-free service. You will not be charged for this call.
+            </p>
+            <div class="modal-buttons">
+                <button class="call-btn" onclick="makeCall()">Call Now</button>
+                <button class="cancel-btn" onclick="hideModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showModal() {
+            document.getElementById('confirmModal').style.display = 'block';
+        }
+
+        function hideModal() {
+            document.getElementById('confirmModal').style.display = 'none';
+        }
+
+        function makeCall() {
+            // Use tel: protocol to open dialer with Kiran Helpline number
+            window.location.href = 'tel:18005990019';
+            hideModal();
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('confirmModal');
+            if (event.target == modal) {
+                hideModal();
+            }
+        }
+    </script>
+
+    <h2>Platform Compatibility:</h2>
+    <ul>
+        <li><strong>Mobile devices:</strong> The tel: protocol will open the native phone app</li>
+        <li><strong>Desktop browsers:</strong> Will attempt to open the default calling app (Skype, Teams, etc.) or show options</li>
+        <li><strong>Web browsers:</strong> Modern browsers support tel: links and will handle them appropriately based on the device</li>
+    </ul>
+
+    <h2>Expected Behavior:</h2>
+    <ul>
+        <li>On mobile: Native phone dialer opens with the number pre-filled</li>
+        <li>On desktop: Default calling app opens or user is prompted to choose an app</li>
+        <li>The number 1800-599-0019 is toll-free in India</li>
+        <li>The confirmation step prevents accidental calls</li>
+    </ul>
+</body>
+</html>

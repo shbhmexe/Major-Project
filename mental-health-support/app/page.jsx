@@ -7,6 +7,7 @@ import { useLanguage } from '@/lib/language';
 import { AnimatedText } from '@/components/AnimatedText';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { MobileNavigation } from '@/components/MobileNavigation';
+import { EmergencySOS } from '@/components/EmergencySOS';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import { ShootingStars } from '@/components/ShootingStars';
@@ -115,6 +116,12 @@ export default function HomePage() {
                   </>
                 )}
                 <LanguageSwitcher />
+                <EmergencySOS className="ml-4" />
+              </div>
+              
+              {/* Mobile Emergency SOS Button */}
+              <div className="md:hidden mr-2">
+                <EmergencySOS className="" />
               </div>
               
               {/* Mobile Navigation */}
