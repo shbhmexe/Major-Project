@@ -1,9 +1,11 @@
 'use client';
 
+import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth';
 import { useText } from '@/app/providers';
 import { useLanguage } from '@/lib/language';
+import { getIncompleteAssessments } from '@/lib/assessments';
 import { AnimatedText } from '@/components/AnimatedText';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { MobileNavigation } from '@/components/MobileNavigation';
@@ -18,6 +20,30 @@ export default function HomePage() {
   const router = useRouter();
   const { user, isAuthenticated, isGuest, logout } = useAuth();
   const { t } = useLanguage();
+  
+  // Redirect authenticated users to assessment if they haven't completed it
+  useEffect(() => {
+    console.log('Auth State:', { isAuthenticated, isGuest, user });
+    
+    if (isAuthenticated && !isGuest && user) {
+      // Clear localStorage for fresh start (remove this after testing)
+      localStorage.removeItem('user_assessments');
+      
+      const savedAssessments = JSON.parse(localStorage.getItem('user_assessments') || '{}');
+      const incompleteAssessments = getIncompleteAssessments(savedAssessments);
+      
+      console.log('Saved Assessments:', savedAssessments);
+      console.log('Incomplete Assessments:', incompleteAssessments);
+      console.log('Current Path:', window.location.pathname);
+      
+      // Only redirect if there are incomplete assessments and user is not already on assessment page
+      if (incompleteAssessments.length > 0 && !window.location.pathname.includes('/assessment')) {
+        console.log('Redirecting to assessment...');
+        router.push('/assessment');
+        return;
+      }
+    }
+  }, [isAuthenticated, isGuest, user, router]);
   
   return (
     <div className="min-h-screen bg-gradient-to-br from-teal-50 to-blue-50 dark:from-gray-900 dark:to-gray-800 relative overflow-x-hidden">

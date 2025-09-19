@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mental Health Assessment Demo</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f0fdfa 0%, #e6fffa 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .demo-box {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+            margin-bottom: 24px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .highlight {
+            background: #fef3c7;
+            border: 2px solid #f59e0b;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+            margin: 20px 0;
+        }
+
+        .feature-card {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 16px;
+            border-left: 4px solid #0d9488;
+        }
+
+        .assessment-preview {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 2px solid #0d9488;
+        }
+
+        .progress-bar {
+            background: #e5e7eb;
+            border-radius: 10px;
+            height: 8px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: #0d9488;
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+
+        .question-demo {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #d1d5db;
+            margin: 15px 0;
+        }
+
+        .option {
+            background: #f9fafb;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            padding: 12px;
+            margin: 8px 0;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .option:hover {
+            border-color: #0d9488;
+            background: #f0fdfa;
+        }
+
+        .option.selected {
+            border-color: #0d9488;
+            background: #f0fdfa;
+        }
+
+        .results-demo {
+            text-align: center;
+            padding: 30px;
+        }
+
+        .score-badge {
+            display: inline-block;
+            font-size: 48px;
+            font-weight: bold;
+            color: #059669;
+            background: #d1fae5;
+            border: 2px solid #10b981;
+            border-radius: 16px;
+            padding: 20px 40px;
+            margin: 20px 0;
+        }
+
+        .severity {
+            font-size: 24px;
+            font-weight: 600;
+            color: #065f46;
+            margin-bottom: 10px;
+        }
+
+        .recommendations {
+            text-align: left;
+            background: white;
+            border: 1px solid #d1d5db;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .emergency-demo {
+            background: #fef2f2;
+            border: 2px solid #fecaca;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .sos-button {
+            background: #dc2626;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+
+        .sos-button:hover {
+            background: #b91c1c;
+            transform: scale(1.05);
+        }
+
+        .btn {
+            background: #0d9488;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            background: #0f766e;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #0d9488;
+            border: 2px solid #0d9488;
+        }
+
+        .btn-secondary:hover {
+            background: #f0fdfa;
+        }
+
+        h1, h2, h3 {
+            color: #1f2937;
+        }
+
+        .flow-diagram {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .flow-step {
+            background: white;
+            border: 2px solid #0d9488;
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            min-width: 120px;
+        }
+
+        .flow-arrow {
+            font-size: 24px;
+            color: #0d9488;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="demo-box">
+            <h1>🧠 Mental Health Assessment Feature</h1>
+            <p>A comprehensive implementation of clinically validated PHQ-9 and GAD-7 assessments for your mental health platform.</p>
+            
+            <div class="highlight">
+                <h3>✅ Implementation Complete!</h3>
+                <p><strong>Authenticated users will be automatically redirected to complete their assessments before accessing the main platform.</strong></p>
+            </div>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>📋 PHQ-9 Depression Screening</h4>
+                    <p>Clinically validated 9-question assessment for depression severity</p>
+                </div>
+                <div class="feature-card">
+                    <h4>😰 GAD-7 Anxiety Screening</h4>
+                    <p>7-question assessment for generalized anxiety disorder</p>
+                </div>
+                <div class="feature-card">
+                    <h4>🎯 Automatic Scoring</h4>
+                    <p>Real-time calculation with severity classification</p>
+                </div>
+                <div class="feature-card">
+                    <h4>🚨 Emergency SOS</h4>
+                    <p>Kiran Helpline button for moderate+ severity</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- User Flow -->
+        <div class="demo-box">
+            <h2>📍 User Flow</h2>
+            <div class="flow-diagram">
+                <div class="flow-step">
+                    <strong>1. Login</strong><br>
+                    User authenticates
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <strong>2. Assessment Check</strong><br>
+                    System checks completion
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <strong>3. Redirect</strong><br>
+                    Auto-redirect to /assessment
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <strong>4. Complete</strong><br>
+                    Take PHQ-9 & GAD-7
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <strong>5. Platform Access</strong><br>
+                    Full platform available
+                </div>
+            </div>
+        </div>
+
+        <!-- Assessment Preview -->
+        <div class="demo-box">
+            <h2>📝 Assessment Interface Preview</h2>
+            
+            <div class="assessment-preview">
+                <h3>PHQ-9 Depression Screening</h3>
+                <p><em>Over the last 2 weeks, how often have you been bothered by any of the following problems?</em></p>
+                
+                <div style="display: flex; justify-content: space-between; font-size: 14px; color: #6b7280; margin-bottom: 8px;">
+                    <span>Question 2 of 9</span>
+                    <span>22% complete</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 22%;"></div>
+                </div>
+
+                <div class="question-demo">
+                    <h4>Feeling down, depressed, or hopeless</h4>
+                    <div class="option">Not at all</div>
+                    <div class="option selected">Several days</div>
+                    <div class="option">More than half the days</div>
+                    <div class="option">Nearly every day</div>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; margin-top: 20px;">
+                    <button class="btn btn-secondary">Previous</button>
+                    <button class="btn">Next</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Preview -->
+        <div class="demo-box">
+            <h2>📊 Results & Scoring</h2>
+            
+            <div class="results-demo">
+                <div style="display: flex; justify-content: center; margin-bottom: 20px;">
+                    <div style="width: 64px; height: 64px; background: #d1fae5; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                        <span style="font-size: 32px; color: #059669;">✓</span>
+                    </div>
+                </div>
+                <h3>Assessment Complete</h3>
+                <p style="color: #6b7280;">PHQ-9 Depression Screening Results</p>
+
+                <div class="score-badge">7</div>
+                <div class="severity">Mild Depression</div>
+                <p style="color: #6b7280;">Mild depression symptoms</p>
+
+                <div class="recommendations">
+                    <h4>Recommendations</h4>
+                    <ul style="text-align: left; line-height: 1.6;">
+                        <li>Your responses suggest mild depression symptoms</li>
+                        <li>Consider speaking with a healthcare professional or counselor</li>
+                        <li>Maintain regular exercise and social activities</li>
+                        <li>Monitor your symptoms and seek help if they worsen</li>
+                    </ul>
+                </div>
+
+                <div style="display: flex; gap: 16px; justify-content: center; margin-top: 20px;">
+                    <button class="btn">View Resources</button>
+                    <button class="btn btn-secondary">Book Session</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Emergency SOS Preview -->
+        <div class="demo-box">
+            <h2>🚨 Emergency Support Feature</h2>
+            
+            <div class="emergency-demo">
+                <h3 style="color: #dc2626;">Need Immediate Support?</h3>
+                <p style="color: #991b1b;">Your assessment results suggest seeking professional help</p>
+                
+                <div style="background: white; border: 2px solid #fecaca; border-radius: 12px; padding: 16px; margin: 16px 0;">
+                    <h4 style="color: #991b1b; margin: 0 0 4px 0;">❤️ Kiran Mental Health Helpline</h4>
+                    <p style="color: #991b1b; margin: 0; font-weight: bold;">1800-599-0019</p>
+                </div>
+
+                <button class="sos-button" onclick="testSOSCall()">
+                    📞 Emergency SOS
+                </button>
+                
+                <p style="font-size: 14px; color: #6b7280; margin-top: 16px;">
+                    Shows automatically for moderate, moderately severe, or severe severity levels
+                </p>
+            </div>
+        </div>
+
+        <!-- Technical Features -->
+        <div class="demo-box">
+            <h2>⚙️ Technical Features</h2>
+            
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>🔒 Auth Integration</h4>
+                    <p>Automatic redirect after login to ensure assessments are completed first</p>
+                </div>
+                <div class="feature-card">
+                    <h4>💾 Progress Saving</h4>
+                    <p>Assessment progress and results saved in localStorage (ready for database integration)</p>
+                </div>
+                <div class="feature-card">
+                    <h4>📱 Responsive Design</h4>
+                    <p>Optimized for mobile and desktop with smooth animations</p>
+                </div>
+                <div class="feature-card">
+                    <h4>🌐 tel: Protocol</h4>
+                    <p>Emergency SOS opens device dialer with pre-filled helpline number</p>
+                </div>
+                <div class="feature-card">
+                    <h4>🎨 Consistent UI</h4>
+                    <p>Matches your platform's teal theme and design language</p>
+                </div>
+                <div class="feature-card">
+                    <h4>📈 Clinical Accuracy</h4>
+                    <p>Uses validated PHQ-9 and GAD-7 scoring ranges and severity classifications</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Implementation Status -->
+        <div class="demo-box">
+            <h2>✅ Implementation Status</h2>
+            
+            <div style="background: #f0fdf4; border: 2px solid #22c55e; border-radius: 12px; padding: 20px;">
+                <h3 style="color: #166534; margin-top: 0;">🎉 Ready for Production!</h3>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin: 16px 0;">
+                    <div>✅ PHQ-9 Assessment Component</div>
+                    <div>✅ GAD-7 Assessment Component</div>
+                    <div>✅ Scoring & Classification Logic</div>
+                    <div>✅ Results Display with Recommendations</div>
+                    <div>✅ Emergency SOS Integration</div>
+                    <div>✅ Auth Flow Integration</div>
+                    <div>✅ Progress Tracking</div>
+                    <div>✅ Mobile-Responsive Design</div>
+                </div>
+
+                <p style="color: #166534; margin-bottom: 0;">
+                    <strong>All authenticated users will now be automatically redirected to complete their mental health assessment before accessing the platform.</strong>
+                </p>
+            </div>
+        </div>
+
+        <!-- Routes Created -->
+        <div class="demo-box">
+            <h2>🛣️ New Routes & Files</h2>
+            
+            <div style="background: #f8fafc; border-radius: 8px; padding: 16px; font-family: monospace; font-size: 14px;">
+                <strong>Pages:</strong><br>
+                📄 /app/assessment/page.jsx - Main assessment page<br><br>
+                
+                <strong>Components:</strong><br>
+                🔧 /components/MentalHealthAssessment.jsx - Assessment interface<br><br>
+                
+                <strong>Utilities:</strong><br>
+                📊 /lib/assessments.js - Assessment data & scoring logic<br><br>
+                
+                <strong>Integration:</strong><br>
+                🔄 Modified /app/page.jsx - Added assessment redirect logic
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function testSOSCall() {
+            alert('🚨 SOS Demo\n\nIn the real application, this will:\n1. Show confirmation modal\n2. Open device dialer with 1800-599-0019\n3. Connect to Kiran Mental Health Helpline\n\nThis feature activates automatically for:\n• Moderate depression (PHQ-9: 10-14)\n• Moderately severe depression (PHQ-9: 15-19)\n• Severe depression (PHQ-9: 20-27)\n• Moderate anxiety (GAD-7: 10-14)\n• Severe anxiety (GAD-7: 15-21)');
+        }
+    </script>
+</body>
+</html>

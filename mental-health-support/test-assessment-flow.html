@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assessment Flow Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #f0fdfa;
+        }
+        
+        .test-section {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #0d9488;
+        }
+        
+        button {
+            background: #0d9488;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        
+        button:hover {
+            background: #0f766e;
+        }
+        
+        .info {
+            background: #f0fdfa;
+            border: 1px solid #0d9488;
+            padding: 10px;
+            border-radius: 6px;
+            margin: 10px 0;
+        }
+        
+        .alert {
+            background: #fef2f2;
+            border: 1px solid #dc2626;
+            padding: 10px;
+            border-radius: 6px;
+            margin: 10px 0;
+            color: #dc2626;
+        }
+        
+        .success {
+            background: #f0fdf4;
+            border: 1px solid #22c55e;
+            padding: 10px;
+            border-radius: 6px;
+            margin: 10px 0;
+            color: #166534;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧠 Assessment Flow Testing - SukoonU</h1>
+    
+    <div class="test-section">
+        <h2>1. Clear All Assessment Data</h2>
+        <p>Clear localStorage to simulate fresh user login</p>
+        <button onclick="clearAssessmentData()">Clear Assessment Data</button>
+        <button onclick="checkCurrentData()">Check Current Data</button>
+        <div id="dataStatus"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>2. Test Assessment Logic</h2>
+        <p>Test the assessment completion check logic</p>
+        <button onclick="testIncompleteAssessments()">Test Incomplete Check</button>
+        <button onclick="simulateAssessmentComplete()">Mark Assessments Complete</button>
+        <div id="logicStatus"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>3. Manual Redirect to Assessment</h2>
+        <p>Direct navigation to assessment page</p>
+        <button onclick="goToAssessment()">Go to Assessment Page</button>
+        <button onclick="goToHomepage()">Go to Homepage</button>
+    </div>
+    
+    <div class="test-section">
+        <h2>4. Authentication Simulation</h2>
+        <p>Simulate different authentication states</p>
+        <button onclick="simulateAuth()">Simulate Authenticated User</button>
+        <button onclick="clearAuth()">Clear Auth</button>
+        <div id="authStatus"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>5. Debug Information</h2>
+        <pre id="debugInfo" style="background: #f8fafc; padding: 10px; border-radius: 4px; font-size: 12px;"></pre>
+        <button onclick="updateDebugInfo()">Refresh Debug Info</button>
+    </div>
+
+    <script>
+        // Assessment data functions from lib/assessments.js
+        const getIncompleteAssessments = (userAssessments) => {
+            const allAssessments = ['phq9', 'gad7'];
+            const incomplete = allAssessments.filter(assessment => {
+                return !userAssessments || !userAssessments[assessment] || 
+                       !userAssessments[assessment].completed;
+            });
+            return incomplete;
+        };
+
+        function clearAssessmentData() {
+            localStorage.removeItem('user_assessments');
+            document.getElementById('dataStatus').innerHTML = '<div class="success">✅ Assessment data cleared!</div>';
+            updateDebugInfo();
+        }
+        
+        function checkCurrentData() {
+            const data = localStorage.getItem('user_assessments');
+            const assessments = JSON.parse(data || '{}');
+            const incomplete = getIncompleteAssessments(assessments);
+            
+            document.getElementById('dataStatus').innerHTML = `
+                <div class="info">
+                    <strong>Current Assessment Data:</strong><br>
+                    Raw Data: ${data || 'null'}<br>
+                    Incomplete Assessments: ${JSON.stringify(incomplete)}<br>
+                    Need Redirect: ${incomplete.length > 0 ? 'YES' : 'NO'}
+                </div>
+            `;
+            updateDebugInfo();
+        }
+        
+        function testIncompleteAssessments() {
+            const saved = JSON.parse(localStorage.getItem('user_assessments') || '{}');
+            const incomplete = getIncompleteAssessments(saved);
+            
+            document.getElementById('logicStatus').innerHTML = `
+                <div class="info">
+                    <strong>Assessment Logic Test:</strong><br>
+                    Saved Assessments: ${JSON.stringify(saved, null, 2)}<br>
+                    Incomplete Count: ${incomplete.length}<br>
+                    Incomplete Types: ${JSON.stringify(incomplete)}<br>
+                    Should Redirect: ${incomplete.length > 0 ? 'YES ✅' : 'NO ❌'}
+                </div>
+            `;
+        }
+        
+        function simulateAssessmentComplete() {
+            const completeData = {
+                phq9: {
+                    assessmentType: 'phq9',
+                    score: 5,
+                    completed: true,
+                    completedAt: new Date().toISOString()
+                },
+                gad7: {
+                    assessmentType: 'gad7', 
+                    score: 3,
+                    completed: true,
+                    completedAt: new Date().toISOString()
+                }
+            };
+            
+            localStorage.setItem('user_assessments', JSON.stringify(completeData));
+            
+            document.getElementById('logicStatus').innerHTML = `
+                <div class="success">✅ Marked all assessments as complete!</div>
+            `;
+            updateDebugInfo();
+        }
+        
+        function goToAssessment() {
+            window.location.href = '/assessment';
+        }
+        
+        function goToHomepage() {
+            window.location.href = '/';
+        }
+        
+        function simulateAuth() {
+            // This won't actually affect the Next.js auth system, but good for reference
+            document.getElementById('authStatus').innerHTML = `
+                <div class="info">
+                    <strong>Auth Simulation:</strong><br>
+                    Note: This test page cannot modify Next.js authentication state.<br>
+                    To test auth flow, please login through the actual application.<br>
+                    Current URL: ${window.location.href}
+                </div>
+            `;
+        }
+        
+        function clearAuth() {
+            document.getElementById('authStatus').innerHTML = `
+                <div class="info">Auth state cleared (simulation only)</div>
+            `;
+        }
+        
+        function updateDebugInfo() {
+            const assessmentData = localStorage.getItem('user_assessments');
+            const parsed = JSON.parse(assessmentData || '{}');
+            const incomplete = getIncompleteAssessments(parsed);
+            
+            const debugInfo = {
+                timestamp: new Date().toISOString(),
+                currentUrl: window.location.href,
+                localStorage_user_assessments: assessmentData,
+                parsedAssessments: parsed,
+                incompleteAssessments: incomplete,
+                shouldRedirect: incomplete.length > 0,
+                redirectCondition: 'incompleteAssessments.length > 0 && !pathname.includes("/assessment")',
+                nextSteps: incomplete.length > 0 ? 'Login and visit homepage - should redirect to /assessment' : 'Login and visit homepage - should stay on homepage'
+            };
+            
+            document.getElementById('debugInfo').textContent = JSON.stringify(debugInfo, null, 2);
+        }
+        
+        // Initialize
+        updateDebugInfo();
+        
+        // Test on page load
+        setTimeout(() => {
+            checkCurrentData();
+            testIncompleteAssessments();
+        }, 500);
+    </script>
+    
+    <div class="test-section">
+        <h2>📋 Testing Instructions</h2>
+        <ol>
+            <li><strong>Clear Assessment Data</strong> - Click "Clear Assessment Data" button above</li>
+            <li><strong>Login to SukoonU</strong> - Go to <a href="http://localhost:3000/login" target="_blank">http://localhost:3000/login</a></li>
+            <li><strong>After Login</strong> - Should automatically redirect to /assessment page</li>
+            <li><strong>If No Redirect</strong> - Check browser console for logs, and verify auth state</li>
+            <li><strong>Complete Assessment</strong> - Take PHQ-9 and GAD-7 assessments</li>
+            <li><strong>Verify Results</strong> - Should show "Continue to Platform" button</li>
+        </ol>
+        
+        <div class="alert">
+            <strong>⚠️ If assessment redirect isn't working:</strong><br>
+            1. Check browser console logs<br>
+            2. Verify you're logged in (not guest mode)<br>
+            3. Clear localStorage and try again<br>
+            4. Check authentication state in console
+        </div>
+    </div>
+</body>
+</html>
