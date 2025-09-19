@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assessment Completion Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        .test-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .test-result {
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .clear-btn {
+            background-color: #dc3545;
+        }
+        .clear-btn:hover {
+            background-color: #c82333;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧠 Assessment Completion Test</h1>
+    
+    <div class="test-container">
+        <h2>Current localStorage State</h2>
+        <div id="localStorageState"></div>
+        <button onclick="refreshState()">Refresh State</button>
+        <button class="clear-btn" onclick="clearAssessments()">Clear All Assessments</button>
+    </div>
+
+    <div class="test-container">
+        <h2>Test Assessment Completion</h2>
+        <button onclick="completePhq9()">Complete PHQ-9 Assessment</button>
+        <button onclick="completeGad7()">Complete GAD-7 Assessment</button>
+        <button onclick="completeBothAssessments()">Complete Both Assessments</button>
+    </div>
+
+    <div class="test-container">
+        <h2>Redirect Logic Test</h2>
+        <button onclick="testRedirectLogic()">Test Redirect Logic</button>
+        <div id="redirectResults"></div>
+    </div>
+
+    <div class="test-container">
+        <h2>Instructions</h2>
+        <ol>
+            <li>Clear all assessments using the "Clear All Assessments" button</li>
+            <li>Complete one or both assessments using the buttons above</li>
+            <li>Test the redirect logic to see if it correctly identifies completed assessments</li>
+            <li>Open your actual app in another tab and verify that completed assessments don't trigger redirects</li>
+        </ol>
+    </div>
+
+    <script>
+        // Function to get incomplete assessments (copied from your lib)
+        function getIncompleteAssessments(userAssessments) {
+            const allAssessments = ['phq9', 'gad7'];
+            const incomplete = allAssessments.filter(assessment => {
+                return !userAssessments || !userAssessments[assessment] || 
+                       !userAssessments[assessment].completed;
+            });
+            return incomplete;
+        }
+
+        function refreshState() {
+            const savedAssessments = JSON.parse(localStorage.getItem('user_assessments') || '{}');
+            const incomplete = getIncompleteAssessments(savedAssessments);
+            
+            document.getElementById('localStorageState').innerHTML = `
+                <div class="test-result success">
+                    <strong>Saved Assessments:</strong><br>
+                    <pre>${JSON.stringify(savedAssessments, null, 2)}</pre>
+                </div>
+                <div class="test-result ${incomplete.length > 0 ? 'error' : 'success'}">
+                    <strong>Incomplete Assessments:</strong> ${incomplete.join(', ') || 'None'}
+                </div>
+            `;
+        }
+
+        function clearAssessments() {
+            localStorage.removeItem('user_assessments');
+            refreshState();
+        }
+
+        function completePhq9() {
+            const assessments = JSON.parse(localStorage.getItem('user_assessments') || '{}');
+            assessments.phq9 = {
+                assessmentType: 'phq9',
+                score: 5,
+                classification: { severity: 'Mild', description: 'Mild depression symptoms' },
+                answers: { 1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 0, 7: 0, 8: 0, 9: 0 },
+                completedAt: new Date().toISOString(),
+                completed: true
+            };
+            localStorage.setItem('user_assessments', JSON.stringify(assessments));
+            refreshState();
+        }
+
+        function completeGad7() {
+            const assessments = JSON.parse(localStorage.getItem('user_assessments') || '{}');
+            assessments.gad7 = {
+                assessmentType: 'gad7',
+                score: 3,
+                classification: { severity: 'Minimal', description: 'Minimal anxiety symptoms' },
+                answers: { 1: 1, 2: 1, 3: 1, 4: 0, 5: 0, 6: 0, 7: 0 },
+                completedAt: new Date().toISOString(),
+                completed: true
+            };
+            localStorage.setItem('user_assessments', JSON.stringify(assessments));
+            refreshState();
+        }
+
+        function completeBothAssessments() {
+            completePhq9();
+            completeGad7();
+        }
+
+        function testRedirectLogic() {
+            const savedAssessments = JSON.parse(localStorage.getItem('user_assessments') || '{}');
+            
+            // Test the NEW logic from the fix
+            const phq9Complete = savedAssessments.phq9 && savedAssessments.phq9.completed === true;
+            const gad7Complete = savedAssessments.gad7 && savedAssessments.gad7.completed === true;
+            const allAssessmentsComplete = phq9Complete && gad7Complete;
+            
+            const currentPath = '/'; // Simulating homepage
+            const shouldRedirect = !allAssessmentsComplete && !currentPath.includes('/assessment');
+            
+            const incompleteAssessments = getIncompleteAssessments(savedAssessments);
+
+            document.getElementById('redirectResults').innerHTML = `
+                <div class="test-result ${shouldRedirect ? 'error' : 'success'}">
+                    <strong>Should Redirect:</strong> ${shouldRedirect ? 'YES' : 'NO'}<br>
+                    <strong>PHQ-9 Complete:</strong> ${phq9Complete}<br>
+                    <strong>GAD-7 Complete:</strong> ${gad7Complete}<br>
+                    <strong>All Assessments Complete:</strong> ${allAssessmentsComplete}<br>
+                    <strong>Incomplete Assessments:</strong> ${incompleteAssessments.join(', ') || 'None'}<br>
+                    <strong>Current Path:</strong> ${currentPath}
+                </div>
+            `;
+        }
+
+        // Initialize
+        refreshState();
+    </script>
+</body>
+</html>

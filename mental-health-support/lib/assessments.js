@@ -346,8 +346,10 @@ export const shouldShowEmergencyContact = (score, assessmentType) => {
 export const getIncompleteAssessments = (userAssessments) => {
   const allAssessments = ['phq9', 'gad7'];
   const incomplete = allAssessments.filter(assessment => {
-    return !userAssessments || !userAssessments[assessment] || 
-           !userAssessments[assessment].completed;
+    // Consider assessment complete if it's either completed OR skipped
+    const assessmentData = userAssessments && userAssessments[assessment];
+    return !assessmentData || 
+           (!assessmentData.completed && !assessmentData.skipped);
   });
   return incomplete;
 };

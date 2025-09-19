@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Final Continue to Platform Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 15px 0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .test-result {
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+        .success { 
+            background: rgba(40, 167, 69, 0.3); 
+            border: 2px solid #28a745; 
+        }
+        .error { 
+            background: rgba(220, 53, 69, 0.3); 
+            border: 2px solid #dc3545; 
+        }
+        .warning { 
+            background: rgba(255, 193, 7, 0.3); 
+            border: 2px solid #ffc107; 
+            color: #333;
+        }
+        .info { 
+            background: rgba(23, 162, 184, 0.3); 
+            border: 2px solid #17a2b8; 
+        }
+        button {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            margin: 8px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.2s;
+        }
+        button:hover {
+            transform: scale(1.05);
+        }
+        .danger {
+            background: linear-gradient(45deg, #dc3545, #c82333);
+        }
+        .success-btn {
+            background: linear-gradient(45deg, #28a745, #20c997);
+        }
+        pre {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 12px;
+        }
+        .step {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 4px solid #28a745;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 Final Continue to Platform Test</h1>
+        <p><strong>Goal:</strong> Test complete hone ke baad "Continue to Platform" button click karne pe homepage jaana chahiye aur dubara kahi se redirect nahi hona chahiye!</p>
+    </div>
+
+    <div class="container">
+        <h2>📊 Current Status</h2>
+        <div id="status"></div>
+        <button onclick="refreshStatus()">🔄 Refresh Status</button>
+        <button class="danger" onclick="clearAll()">🗑️ Clear All Data</button>
+    </div>
+
+    <div class="container">
+        <h2>🧪 Test Scenarios</h2>
+        
+        <div class="step">
+            <h3>Scenario 1: Complete Test & Continue</h3>
+            <button class="success-btn" onclick="simulateTestComplete()">✅ Simulate Test Complete</button>
+            <button onclick="simulateContinueToPlatform()">🏠 Simulate "Continue to Platform" Click</button>
+            <button onclick="testRedirectAfterContinue()">🔍 Test Redirect After Continue</button>
+        </div>
+
+        <div class="step">
+            <h3>Scenario 2: Skip Test & Continue</h3>
+            <button onclick="simulateSkipTest()">⏭️ Simulate Skip Test</button>
+            <button onclick="testRedirectAfterSkip()">🔍 Test Redirect After Skip</button>
+        </div>
+
+        <div class="step">
+            <h3>Scenario 3: Fresh User (No Data)</h3>
+            <button onclick="simulateFreshUser()">👤 Simulate Fresh User</button>
+            <button onclick="testRedirectFreshUser()">🔍 Test Redirect (Should Redirect)</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>📋 Test Results</h2>
+        <div id="testResults"></div>
+    </div>
+
+    <div class="container">
+        <h2>🔍 Debug Info</h2>
+        <div id="debugInfo"></div>
+    </div>
+
+    <script>
+        let testResults = [];
+
+        // Helper functions
+        function getIncompleteAssessments(userAssessments) {
+            const allAssessments = ['phq9', 'gad7'];
+            return allAssessments.filter(assessment => {
+                const assessmentData = userAssessments && userAssessments[assessment];
+                return !assessmentData || (!assessmentData.completed && !assessmentData.skipped);
+            });
+        }
+
+        function checkRedirectLogic() {
+            const savedAssessments = JSON.parse(localStorage.getItem('user_assessments') || '{}');
+            const phq9Complete = savedAssessments.phq9 && 
+                (savedAssessments.phq9.completed === true || savedAssessments.phq9.skipped === true);
+            const gad7Complete = savedAssessments.gad7 && 
+                (savedAssessments.gad7.completed === true || savedAssessments.gad7.skipped === true);
+            const allAssessmentsHandled = phq9Complete && gad7Complete;
+            const justCompleted = sessionStorage.getItem('assessment_completed');
+            
+            return {
+                savedAssessments,
+                phq9Complete,
+                gad7Complete,
+                allAssessmentsHandled,
+                justCompleted,
+                shouldRedirect: !allAssessmentsHandled && justCompleted !== 'true'
+            };
+        }
+
+        function addTestResult(test, result, details = '') {
+            const resultObj = {
+                test,
+                result,
+                details,
+                timestamp: new Date().toLocaleTimeString()
+            };
+            testResults.push(resultObj);
+            updateTestResults();
+        }
+
+        function updateTestResults() {
+            const html = testResults.map(r => 
+                `<div class="${r.result ? 'success' : 'error'}">
+                    <strong>${r.test}</strong>: ${r.result ? '✅ PASS' : '❌ FAIL'}<br>
+                    <small>${r.details} (${r.timestamp})</small>
+                </div>`
+            ).join('');
+            document.getElementById('testResults').innerHTML = html || '<div class="info">No tests run yet</div>';
+        }
+
+        function refreshStatus() {
+            const logic = checkRedirectLogic();
+            const incompleteAssessments = getIncompleteAssessments(logic.savedAssessments);
+            
+            document.getElementById('status').innerHTML = `
+                <div class="info">
+                    <strong>localStorage assessments:</strong><br>
+                    <pre>${JSON.stringify(logic.savedAssessments, null, 2)}</pre>
+                </div>
+                <div class="${logic.phq9Complete ? 'success' : 'warning'}">
+                    <strong>PHQ-9:</strong> ${logic.phq9Complete ? 'Complete ✅' : 'Incomplete ❌'}
+                </div>
+                <div class="${logic.gad7Complete ? 'success' : 'warning'}">
+                    <strong>GAD-7:</strong> ${logic.gad7Complete ? 'Complete ✅' : 'Incomplete ❌'}
+                </div>
+                <div class="${logic.allAssessmentsHandled ? 'success' : 'error'}">
+                    <strong>All Assessments Handled:</strong> ${logic.allAssessmentsHandled ? 'YES ✅' : 'NO ❌'}
+                </div>
+                <div class="${logic.justCompleted ? 'info' : 'warning'}">
+                    <strong>sessionStorage Flag:</strong> ${logic.justCompleted || 'Not Set'}
+                </div>
+                <div class="${!logic.shouldRedirect ? 'success' : 'error'}">
+                    <strong>Should Redirect:</strong> ${logic.shouldRedirect ? 'YES ❌' : 'NO ✅'}
+                </div>
+            `;
+
+            document.getElementById('debugInfo').innerHTML = `
+                <pre>${JSON.stringify(logic, null, 2)}</pre>
+            `;
+        }
+
+        // Test Functions
+        function simulateTestComplete() {
+            const completeAssessment = {
+                phq9: {
+                    assessmentType: 'phq9',
+                    score: 8,
+                    classification: { severity: 'Mild', description: 'Mild depression symptoms' },
+                    answers: { 1: 2, 2: 1, 3: 1, 4: 2, 5: 1, 6: 1, 7: 0, 8: 0, 9: 0 },
+                    completed: true,
+                    completedAt: new Date().toISOString()
+                }
+            };
+            localStorage.setItem('user_assessments', JSON.stringify(completeAssessment));
+            refreshStatus();
+            addTestResult('Simulate Test Complete', true, 'PHQ-9 assessment completed');
+        }
+
+        function simulateContinueToPlatform() {
+            sessionStorage.setItem('assessment_completed', 'true');
+            refreshStatus();
+            addTestResult('Simulate Continue to Platform', true, 'Set sessionStorage flag to prevent redirect');
+        }
+
+        function testRedirectAfterContinue() {
+            const logic = checkRedirectLogic();
+            const shouldNotRedirect = !logic.shouldRedirect;
+            addTestResult('Test No Redirect After Continue', shouldNotRedirect, 
+                shouldNotRedirect ? 'Correctly prevents redirect' : 'ERROR: Still redirecting!');
+            refreshStatus();
+        }
+
+        function simulateSkipTest() {
+            const skipAll = {
+                phq9: {
+                    assessmentType: 'phq9',
+                    skipped: true,
+                    completed: true,
+                    skippedAt: new Date().toISOString()
+                },
+                gad7: {
+                    assessmentType: 'gad7',
+                    skipped: true,
+                    completed: true,
+                    skippedAt: new Date().toISOString()
+                }
+            };
+            localStorage.setItem('user_assessments', JSON.stringify(skipAll));
+            sessionStorage.setItem('assessment_completed', 'true');
+            refreshStatus();
+            addTestResult('Simulate Skip All Tests', true, 'Both assessments skipped');
+        }
+
+        function testRedirectAfterSkip() {
+            const logic = checkRedirectLogic();
+            const shouldNotRedirect = !logic.shouldRedirect;
+            addTestResult('Test No Redirect After Skip', shouldNotRedirect,
+                shouldNotRedirect ? 'Correctly prevents redirect after skip' : 'ERROR: Still redirecting after skip!');
+            refreshStatus();
+        }
+
+        function simulateFreshUser() {
+            localStorage.removeItem('user_assessments');
+            sessionStorage.removeItem('assessment_completed');
+            refreshStatus();
+            addTestResult('Simulate Fresh User', true, 'All data cleared');
+        }
+
+        function testRedirectFreshUser() {
+            const logic = checkRedirectLogic();
+            const shouldRedirect = logic.shouldRedirect;
+            addTestResult('Test Redirect for Fresh User', shouldRedirect,
+                shouldRedirect ? 'Correctly redirects fresh user to assessment' : 'ERROR: Not redirecting fresh user!');
+            refreshStatus();
+        }
+
+        function clearAll() {
+            localStorage.removeItem('user_assessments');
+            sessionStorage.removeItem('assessment_completed');
+            testResults = [];
+            updateTestResults();
+            refreshStatus();
+        }
+
+        // Initialize
+        refreshStatus();
+        updateTestResults();
+    </script>
+</body>
+</html>

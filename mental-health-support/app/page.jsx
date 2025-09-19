@@ -26,8 +26,13 @@ export default function HomePage() {
     console.log('Auth State:', { isAuthenticated, isGuest, user });
     
     if (isAuthenticated && !isGuest && user) {
-      // Clear localStorage for fresh start (remove this after testing)
-      localStorage.removeItem('user_assessments');
+      // Check if user just completed an assessment and came to homepage
+      const justCompleted = sessionStorage.getItem('assessment_completed');
+      if (justCompleted === 'true') {
+        console.log('User just completed assessment, clearing flag and staying on homepage');
+        sessionStorage.removeItem('assessment_completed');
+        return; // Don't redirect, user just completed assessment
+      }
       
       const savedAssessments = JSON.parse(localStorage.getItem('user_assessments') || '{}');
       const incompleteAssessments = getIncompleteAssessments(savedAssessments);
@@ -36,11 +41,25 @@ export default function HomePage() {
       console.log('Incomplete Assessments:', incompleteAssessments);
       console.log('Current Path:', window.location.pathname);
       
-      // Only redirect if there are incomplete assessments and user is not already on assessment page
-      if (incompleteAssessments.length > 0 && !window.location.pathname.includes('/assessment')) {
+      // Only redirect if user hasn't completed or skipped ALL assessments
+      // Check if both PHQ-9 and GAD-7 are completed (including skipped ones)
+      const phq9Complete = savedAssessments.phq9 && 
+        (savedAssessments.phq9.completed === true || savedAssessments.phq9.skipped === true);
+      const gad7Complete = savedAssessments.gad7 && 
+        (savedAssessments.gad7.completed === true || savedAssessments.gad7.skipped === true);
+      const allAssessmentsHandled = phq9Complete && gad7Complete;
+      
+      console.log('PHQ-9 Complete:', phq9Complete, savedAssessments.phq9);
+      console.log('GAD-7 Complete:', gad7Complete, savedAssessments.gad7);
+      console.log('All Assessments Handled:', allAssessmentsHandled);
+      
+      // Only redirect if NOT all assessments are handled AND not already on assessment page
+      if (!allAssessmentsHandled && !window.location.pathname.includes('/assessment')) {
         console.log('Redirecting to assessment...');
         router.push('/assessment');
         return;
+      } else {
+        console.log('No redirect needed - assessments handled or already on assessment page');
       }
     }
   }, [isAuthenticated, isGuest, user, router]);

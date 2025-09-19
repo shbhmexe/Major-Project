@@ -73,16 +73,23 @@ export default function AssessmentPage() {
   };
 
   const handleSkipAssessment = () => {
-    const incompleteAssessments = getIncompleteAssessments(userAssessments);
-    const currentIndex = incompleteAssessments.indexOf(currentAssessment);
-    const nextIndex = currentIndex + 1;
+    // Mark current assessment as skipped in localStorage to prevent redirect loop
+    const updatedAssessments = {
+      ...userAssessments,
+      [currentAssessment]: {
+        assessmentType: currentAssessment,
+        skipped: true,
+        completed: true, // Mark as completed to prevent redirect
+        skippedAt: new Date().toISOString()
+      }
+    };
     
-    if (nextIndex < incompleteAssessments.length) {
-      setCurrentAssessment(incompleteAssessments[nextIndex]);
-    } else {
-      // No more assessments, allow access to platform
-      router.push('/');
-    }
+    setUserAssessments(updatedAssessments);
+    localStorage.setItem('user_assessments', JSON.stringify(updatedAssessments));
+    
+    // Set flag to prevent redirect and go to platform - user chose to skip
+    sessionStorage.setItem('assessment_completed', 'true');
+    router.push('/');
   };
 
   const renderWelcomeScreen = () => {
@@ -174,10 +181,30 @@ export default function AssessmentPage() {
                 Start Assessment
               </button>
               <button
-                onClick={() => router.push('/')}
+                onClick={() => {
+                  // Skip all assessments by marking them as completed
+                  const skipAll = {
+                    phq9: {
+                      assessmentType: 'phq9',
+                      skipped: true,
+                      completed: true,
+                      skippedAt: new Date().toISOString()
+                    },
+                    gad7: {
+                      assessmentType: 'gad7',
+                      skipped: true,
+                      completed: true,
+                      skippedAt: new Date().toISOString()
+                    }
+                  };
+                  localStorage.setItem('user_assessments', JSON.stringify(skipAll));
+                  // Set flag to prevent redirect
+                  sessionStorage.setItem('assessment_completed', 'true');
+                  router.push('/');
+                }}
                 className="w-full px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
               >
-                Skip for now (You can complete this later)
+                Skip All Assessments & Go to Platform
               </button>
             </div>
 
@@ -204,6 +231,10 @@ export default function AssessmentPage() {
   };
 
   const renderCompletionScreen = () => {
+    const completedAssessments = Object.keys(userAssessments).filter(
+      key => userAssessments[key] && userAssessments[key].completed
+    );
+
     return (
       <div className="min-h-screen bg-gradient-to-br from-teal-50 to-blue-50 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center p-4">
         <div className="max-w-md mx-auto text-center">
@@ -214,17 +245,47 @@ export default function AssessmentPage() {
               </svg>
             </div>
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-              All Assessments Complete!
+              {completedAssessments.length === 2 ? 'All Assessments Complete!' : 'Assessment Complete!'}
             </h2>
-            <p className="text-gray-600 dark:text-gray-400 mb-6">
-              Thank you for completing your mental health assessments. You can now access the full platform.
+            <p className="text-gray-600 dark:text-gray-400 mb-4">
+              {completedAssessments.length === 2 
+                ? 'Thank you for completing your mental health assessments. You can now access the full platform.'
+                : 'Your assessment has been saved. You can complete the remaining assessments later or continue to the platform.'
+              }
             </p>
-            <button
-              onClick={() => router.push('/')}
-              className="w-full px-6 py-3 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors font-medium"
-            >
-              Continue to Platform →
-            </button>
+            {completedAssessments.length < 2 && (
+              <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 mb-6">
+                <p className="text-blue-800 dark:text-blue-200 text-sm">
+                  📝 {2 - completedAssessments.length} assessment{2 - completedAssessments.length === 1 ? '' : 's'} remaining
+                </p>
+              </div>
+            )}
+            <div className="space-y-3">
+              <button
+                onClick={() => {
+                  // Set flag to prevent redirect when going to homepage
+                  sessionStorage.setItem('assessment_completed', 'true');
+                  router.push('/');
+                }}
+                className="w-full px-6 py-3 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors font-medium"
+              >
+                Continue to Platform →
+              </button>
+              {completedAssessments.length < 2 && (
+                <button
+                  onClick={() => {
+                    const nextAssessment = getNextAssessment(userAssessments);
+                    if (nextAssessment) {
+                      setCurrentAssessment(nextAssessment);
+                      setShowWelcome(false);
+                    }
+                  }}
+                  className="w-full px-6 py-3 border border-teal-600 text-teal-600 rounded-lg hover:bg-teal-50 dark:hover:bg-teal-900/20 transition-colors font-medium"
+                >
+                  Continue with Next Assessment
+                </button>
+              )}
+            </div>
           </div>
         </div>
       </div>
