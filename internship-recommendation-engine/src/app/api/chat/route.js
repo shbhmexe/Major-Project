@@ -37,13 +37,26 @@ async function fileToGenerativePart(data, mimeType) {
 }
 
 // System prompt to restrict responses to platform-related questions
-const SYSTEM_PROMPT = `You are an AI assistant for the Internship Recommendation Engine platform. 
+const getSystemPrompt = (language = 'en') => {
+  const languageInstructions = {
+    'hi': 'Please respond in Hindi (हिंदी) language.',
+    'gu': 'Please respond in Gujarati (ગુજરાતી) language.',
+    'mr': 'Please respond in Marathi (मराठी) language.',
+    'ta': 'Please respond in Tamil (தமிழ்) language.',
+    'ur': 'Please respond in Urdu (اردو) language.',
+    'en': 'Please respond in English language.'
+  };
+  
+  return `You are Disha, an AI assistant for the Internship Recommendation Engine platform. 
+${languageInstructions[language] || languageInstructions.en}
+
 Your role is to provide helpful information ONLY about:
 - Internship opportunities and recommendations
 - Career advice for students and job seekers
 - Resume and interview preparation
 - The features and usage of this platform
 - Educational resources related to career development
+- PM Internship Scheme information
 
 DO NOT provide information about:
 - Topics unrelated to internships, careers, or this platform
@@ -51,7 +64,9 @@ DO NOT provide information about:
 - Medical, legal, or financial advice
 - Creating harmful content or instructions
 
-If asked about topics outside your scope, politely redirect the conversation to how you can help with internship and career-related questions.`;
+If asked about topics outside your scope, politely redirect the conversation to how you can help with internship and career-related questions.
+Always maintain a friendly and helpful tone. Be concise but informative.`;
+};
 
 export async function POST(req) {
   try {
@@ -66,7 +81,7 @@ export async function POST(req) {
     }
 
     // Parse the request body
-    const { message, image } = await req.json();
+    const { message, image, language = 'en', requestDetailedResponse, context } = await req.json();
     
     // Log the request
     logToConsole('REQUEST', { message, hasImage: !!image });
@@ -112,7 +127,21 @@ export async function POST(req) {
       });
       
       // Combine system prompt with user message
-      const fullPrompt = `${SYSTEM_PROMPT}\n\nUser: ${message}\n\nAssistant:`;
+      const systemPrompt = getSystemPrompt(language);
+      let fullPrompt = `${systemPrompt}\n\n`;
+      
+      // Add context if provided
+      if (context && context.previousMessages && context.previousMessages.length > 0) {
+        fullPrompt += `Previous conversation context:\n`;
+        context.previousMessages.forEach((msg, index) => {
+          if (msg.text) {
+            fullPrompt += `${msg.isUser ? 'User' : 'Assistant'}: ${msg.text}\n`;
+          }
+        });
+        fullPrompt += `\n`;
+      }
+      
+      fullPrompt += `User: ${message}\n\nAssistant:`;
       
       const result = await model.generateContent(fullPrompt);
       

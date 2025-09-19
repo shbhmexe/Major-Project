@@ -3,6 +3,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { ThemeProvider } from 'styled-components';
 import { MessageSquare, X, Send, Loader2 } from 'lucide-react';
+import DishaAvatar from './DishaAvatar';
+import WelcomePopup from './WelcomePopup';
+import LanguageSelector from './LanguageSelector';
+import { t } from '../utils/translations';
 
 // Fallback chatbot knowledge base (used when API fails)
 const chatbotData = {
@@ -53,16 +57,16 @@ const Message = ({ text, isUser, isTyping = false }) => {
   };
 
   return (
-    <div className={`flex ${isUser ? 'justify-end' : 'justify-start'} mb-4`}>
+    <div className={`flex ${isUser ? 'justify-end' : 'justify-start'} mb-3 sm:mb-4 px-1`}>
       <div 
-        className={`max-w-[80%] rounded-lg px-4 py-2 ${isUser 
+        className={`max-w-[85%] sm:max-w-[80%] rounded-lg px-3 sm:px-4 py-2 text-sm sm:text-base ${isUser 
           ? 'bg-purple-600 text-white rounded-tr-none' 
           : 'bg-gray-100 text-gray-800 rounded-tl-none'}`}
       >
         {showTypewriter ? (
           <TypewriterText text={text} onComplete={handleTypewriterComplete} />
         ) : (
-          text
+          <div className="break-words">{text}</div>
         )}
       </div>
     </div>
@@ -71,9 +75,11 @@ const Message = ({ text, isUser, isTyping = false }) => {
 
 const Chatbot = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState([
-    { text: 'Hello! I\'m your Internship Assistant powered by Google Gemini AI. How can I help you today?', isUser: false, id: Date.now() }
-  ]);
+  const [selectedLanguage, setSelectedLanguage] = useState('en');
+  const [showWelcomePopup, setShowWelcomePopup] = useState(true);
+  const [showLanguageSelector, setShowLanguageSelector] = useState(false);
+  const [hasSelectedLanguage, setHasSelectedLanguage] = useState(false);
+  const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef(null);
@@ -88,7 +94,33 @@ const Chatbot = () => {
   }, [messages]);
 
   const toggleChatbot = () => {
+    if (!isOpen) {
+      // First time opening - show language selector if not selected yet
+      if (!hasSelectedLanguage) {
+        setShowLanguageSelector(true);
+      }
+      setShowWelcomePopup(false);
+    }
     setIsOpen(!isOpen);
+  };
+
+  const handleLanguageSelect = (language) => {
+    setSelectedLanguage(language);
+    setShowLanguageSelector(false);
+    setHasSelectedLanguage(true);
+    
+    // Add language confirmation message
+    const confirmationMessage = {
+      text: t('chatbotLanguageSelected', language),
+      isUser: false,
+      isTyping: true,
+      id: Date.now()
+    };
+    setMessages([confirmationMessage]);
+  };
+
+  const handleWelcomePopupClose = () => {
+    setShowWelcomePopup(false);
   };
 
   // Function to handle sending messages
@@ -110,10 +142,12 @@ const Chatbot = () => {
         },
         body: JSON.stringify({ 
           message: inputValue,
+          language: selectedLanguage,
           requestDetailedResponse: true,
           context: {
             previousMessages: messages.slice(-5), // Send last 5 messages for context
-            userQuery: inputValue
+            userQuery: inputValue,
+            selectedLanguage: selectedLanguage
           }
         }),
       });
@@ -184,40 +218,74 @@ const Chatbot = () => {
   };
 
   return (
-    <div className="fixed bottom-5 right-5 z-50">
-      {/* Chatbot toggle button */}
-      <button
-        type="button"
-        onClick={toggleChatbot}
-        className="bg-purple-700 hover:bg-purple-800 text-white rounded-full p-3 shadow-lg flex items-center justify-center transition-all duration-300"
-        aria-label="Toggle chatbot"
-      >
-        {isOpen ? (
-          <X className="h-6 w-6" />
-        ) : (
-          <MessageSquare className="h-6 w-6" />
-        )}
-      </button>
+    <div className="fixed bottom-4 sm:bottom-5 right-4 sm:right-5 z-50">
+      {/* Disha Avatar with Welcome Popup */}
+      <div className="relative">
+        {/* Welcome Popup */}
+        <WelcomePopup
+          message={t('chatbotWelcome', selectedLanguage)}
+          visible={showWelcomePopup}
+          onClose={handleWelcomePopupClose}
+          position="top"
+        />
+        
+        {/* Avatar Toggle */}
+        <button
+          type="button"
+          onClick={toggleChatbot}
+          className="transition-all duration-300 hover:scale-110 active:scale-95"
+          aria-label="Toggle chatbot"
+        >
+          <DishaAvatar size={60} className="sm:w-[70px] sm:h-[70px] cursor-pointer" />
+        </button>
+      </div>
 
       {/* Chatbot container */}
       {isOpen && (
-        <div className="absolute bottom-16 right-0 w-80 sm:w-96 bg-white rounded-lg shadow-xl overflow-hidden flex flex-col h-[500px]">
+        <div className="fixed sm:absolute bottom-0 sm:bottom-16 left-0 right-0 sm:left-auto sm:right-0 w-full sm:w-80 md:w-96 bg-white rounded-t-lg sm:rounded-lg shadow-xl overflow-hidden flex flex-col h-[90vh] sm:h-[500px] z-40">
           {/* Header */}
           <div className="bg-purple-700 text-white px-4 py-3 flex justify-between items-center">
-            <h3 className="font-medium">Internship Assistant</h3>
-            <span className="text-xs bg-green-500 px-2 py-1 rounded-full">Gemini AI</span>
+            <h3 className="font-medium text-sm sm:text-base">{t('chatbotAssistant', selectedLanguage)}</h3>
+            <div className="flex items-center space-x-2">
+              <button
+                onClick={() => setShowLanguageSelector(true)}
+                className="text-xs bg-white/20 hover:bg-white/30 px-2 py-1 rounded-full transition-colors cursor-pointer"
+                title="Change Language"
+              >
+                🌐 {selectedLanguage.toUpperCase()}
+              </button>
+              {/* Close button for mobile */}
+              <button
+                onClick={() => setIsOpen(false)}
+                className="sm:hidden text-white/80 hover:text-white"
+                aria-label="Close chat"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
           </div>
           
           {/* Messages container */}
-          <div className="flex-1 p-4 overflow-y-auto bg-gray-50">
+          <div className="flex-1 p-3 sm:p-4 overflow-y-auto bg-gray-50">
+            {/* Language Selector */}
+            {showLanguageSelector && (
+              <div className="mb-4 p-3 sm:p-4 bg-white rounded-lg shadow-sm border">
+                <LanguageSelector
+                  onLanguageSelect={handleLanguageSelect}
+                  currentLanguage={selectedLanguage}
+                />
+              </div>
+            )}
+            
+            {/* Messages */}
             {messages.map((message, index) => (
               <Message key={message.id || index} text={message.text} isUser={message.isUser} isTyping={message.isTyping} />
             ))}
             {isLoading && (
               <div className="flex justify-start mb-4">
-                <div className="bg-gray-100 text-gray-800 rounded-lg rounded-tl-none px-4 py-2 flex items-center">
+                <div className="bg-gray-100 text-gray-800 rounded-lg rounded-tl-none px-3 sm:px-4 py-2 flex items-center text-sm">
                   <Loader2 className="h-4 w-4 animate-spin mr-2" />
-                  Thinking...
+                  {t('chatbotThinking', selectedLanguage)}
                 </div>
               </div>
             )}
@@ -237,13 +305,14 @@ const Chatbot = () => {
                 type="text"
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
-                placeholder="Type your message..."
-                className="flex-1 border border-gray-300 rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm"
+                placeholder={showLanguageSelector ? 'Please select a language first...' : t('chatbotPlaceholder', selectedLanguage)}
+                disabled={showLanguageSelector}
+                className={`flex-1 border border-gray-300 rounded-full px-3 sm:px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm ${showLanguageSelector ? 'bg-gray-100 cursor-not-allowed' : ''}`}
               />
               <button
                 type="submit"
-                disabled={isLoading || !inputValue.trim()}
-                className="bg-purple-600 hover:bg-purple-700 disabled:bg-purple-400 text-white rounded-full p-2 transition-colors duration-300"
+                disabled={isLoading || !inputValue.trim() || showLanguageSelector}
+                className="bg-purple-600 hover:bg-purple-700 disabled:bg-purple-400 text-white rounded-full p-2 sm:p-2.5 transition-colors duration-300 flex-shrink-0"
               >
                 <Send className="h-4 w-4" />
               </button>

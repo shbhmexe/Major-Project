@@ -136,6 +136,17 @@ export default function Navbar({ language, setLanguage }) {
                   />
                 </div>
                 <div className="flex items-center space-x-2 ml-4">
+                  <a 
+                    href="https://pminternship.mca.gov.in/login/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center space-x-2 text-green-300 hover:text-green-200 px-3 py-2 rounded-md text-sm font-medium transition-colors border border-green-500/30 bg-green-600/20 hover:bg-green-600/40"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                    </svg>
+                    PM Portal
+                  </a>
                   <Link href="/login" className="flex items-center space-x-2 text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors">
                     <LogIn className="w-4 h-4" />
                     Login
@@ -190,6 +201,12 @@ export default function Navbar({ language, setLanguage }) {
                   className={`block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left ${language === 'ta' ? 'bg-gray-100' : ''}`}
                 >
                   தமிழ் (Tamil)
+                </button>
+                <button
+                  onClick={() => setLanguage('ur')}
+                  className={`block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left ${language === 'ur' ? 'bg-gray-100' : ''}`}
+                >
+                  اردو (Urdu)
                 </button>
               </div>
             </div>

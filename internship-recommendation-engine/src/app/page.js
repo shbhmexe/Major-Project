@@ -12,6 +12,7 @@ import Footer from '@/components/Footer';
 import Orb from '@/components/Orb';
 import PMInternshipScheme from '@/components/PMInternshipScheme';
 import CompanyLogoStrip from '@/components/CompanyLogoStrip';
+import Chatbot from '@/components/Chatbot';
 
 export default function Home() {
   const [language, setLanguage] = useState('en');
@@ -26,7 +27,7 @@ export default function Home() {
   // Effect to load saved language preference on component mount
   useEffect(() => {
     const savedLanguage = localStorage.getItem('preferredLanguage');
-    if (savedLanguage && ['en', 'hi', 'gu', 'mr', 'ta'].includes(savedLanguage)) {
+    if (savedLanguage && ['en', 'hi', 'gu', 'mr', 'ta', 'ur'].includes(savedLanguage)) {
       setLanguage(savedLanguage);
     }
   }, []);
@@ -83,6 +84,9 @@ export default function Home() {
         <ContactForm language={language} />
         <Footer language={language} />
       </div>
+      
+      {/* Chatbot Component */}
+      <Chatbot />
     </div>
   );
 }

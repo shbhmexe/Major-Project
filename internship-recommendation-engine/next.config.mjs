@@ -4,8 +4,6 @@ const nextConfig = {
   experimental: {
     // Enable experimental features
   },
-  // Disable SWC plugins to fix runtime errors
-  swcMinify: true,
   // Configure webpack for compatibility
   webpack: (config, { isServer }) => {
     // Fix for Windows file path issues

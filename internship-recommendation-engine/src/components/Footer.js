@@ -5,6 +5,7 @@ import { t } from '@/utils/translations';
 
 export default function Footer({ language }) {
   const quickLinks = [
+    { label: 'Official PM Portal', href: 'https://pminternship.mca.gov.in/login/', external: true },
     { label: t('aboutScheme', language), href: '#' },
     { label: t('guidelines', language), href: '#' },
     { label: t('support', language), href: '#' },
@@ -72,7 +73,10 @@ export default function Footer({ language }) {
                 <li key={index}>
                   <a
                     href={link.href}
-                    className="text-gray-300 hover:text-white transition-colors duration-200 flex items-center group"
+                    {...(link.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                    className={`text-gray-300 hover:text-white transition-colors duration-200 flex items-center group ${
+                      link.external ? 'text-green-300 hover:text-green-200' : ''
+                    }`}
                   >
                     {link.label}
                     <ExternalLink className="w-3 h-3 ml-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />

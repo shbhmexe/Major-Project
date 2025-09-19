@@ -114,6 +114,17 @@ export const translations = {
     stipend: 'Stipend',
     location: 'Location',
     requirements: 'Requirements',
+    
+    // Chatbot
+    chatbotWelcome: 'Welcome to Disha Chatbot! This will help you guide with your preferred language.',
+    chatbotAssistant: 'Internship Assistant',
+    chatbotSelectLanguage: 'Please select your preferred language:',
+    chatbotLanguageSelected: 'Great! I will now assist you in English. How can I help you today?',
+    chatbotThinking: 'Thinking...',
+    chatbotPlaceholder: 'Type your message...',
+    chatbotHome: 'Home',
+    chatbotMainMenu: 'Main Menu',
+    chatbotChangeLanguage: 'Change Language',
   },
   
   hi: {
@@ -231,6 +242,17 @@ export const translations = {
     stipend: 'वेतन',
     location: 'स्थान',
     requirements: 'आवश्यकताएं',
+    
+    // Chatbot
+    chatbotWelcome: 'दिशा चैटबॉट में आपका स्वागत है! यह आपकी पसंदीदा भाषा में मार्गदर्शन करने में मदद करेगा।',
+    chatbotAssistant: 'इंटर्नशिप सहायक',
+    chatbotSelectLanguage: 'कृपया अपनी पसंदीदा भाषा चुनें:',
+    chatbotLanguageSelected: 'बहुत अच्छा! मैं अब आपकी हिंदी में सहायता करूंगा। मैं आपकी कैसे मदद कर सकता हूं?',
+    chatbotThinking: 'सोच रहा हूं...',
+    chatbotPlaceholder: 'अपना संदेश टाइप करें...',
+    chatbotHome: 'होम',
+    chatbotMainMenu: 'मुख्य मेन्यू',
+    chatbotChangeLanguage: 'भाषा बदलें',
   },
   
   gu: {
@@ -259,7 +281,18 @@ export const translations = {
     multilingual: 'બહુભાષી સમર્થન',
     multilingualDesc: 'વધુ સારી સુલભતા માટે અનેક પ્રાદેશિક ભાષાઓમાં ઉપલબ્ધ',
     quickResults: 'ઝડપી પરિણામો',
-    quickResultsDesc: 'કલાકોમાં નહીં, સેકન્ડમાં તમારી વ્યક્તિગત ભલામણો મેળવો'
+    quickResultsDesc: 'કલાકોમાં નહીં, સેકંડમાં તમારી વ્યક્તિગત ભલામણો મેળવો',
+    
+    // Chatbot
+    chatbotWelcome: 'દિશા ચેટબોટમાં સ્વાગત છે! આ તમારી પસંદીદા ભાષામાં માર્ગદર્શન કરવામાં મદદ કરશે.',
+    chatbotAssistant: 'ઇન્ટર્નશિપ સહાયક',
+    chatbotSelectLanguage: 'કૃપયા તમારી પસંદ વાળી ભાષા પસંદ કરો:',
+    chatbotLanguageSelected: 'ખૂબ સારું! હું અબ ગુજરાતીમાં તમારી મદદ કરીશ. હું તમારી કેવી રીતે મદદ કરી શકું?',
+    chatbotThinking: 'વિચાર કરું છું...',
+    chatbotPlaceholder: 'તમારો સંદેશ ટાઇપ કરો...',
+    chatbotHome: 'હોમ',
+    chatbotMainMenu: 'મેઇન મેનુ',
+    chatbotChangeLanguage: 'ભાષા બદલો',
   },
   
   mr: {
@@ -288,7 +321,18 @@ export const translations = {
     multilingual: 'बहुभाषिक समर्थन',
     multilingualDesc: 'चांगल्या प्रवेशासाठी अनेक प्रादेशिक भाषांमध्ये उपलब्ध',
     quickResults: 'जलद परिणाम',
-    quickResultsDesc: 'तासांमध्ये नाही, सेकंदांमध्ये तुमच्या वैयक्तिक शिफारसी मिळवा'
+    quickResultsDesc: 'तासांमध्ये नाही, सेकंदांमध्ये तुमच्या वैयक्तिक शिफारसी मिळवा',
+    
+    // Chatbot
+    chatbotWelcome: 'दिशा चॅटबॉटमध्ये स्वागत आहे! हे तुमच्या पसंदीच्या भाषेत मार्गदर्शन करण्यात मदत करेल.',
+    chatbotAssistant: 'इंटर्नशिप सहायक',
+    chatbotSelectLanguage: 'कृपया तुमची पसंदीची भाषा निवडा:',
+    chatbotLanguageSelected: 'उत्तम! आता मी तुमच्या मराठीमध्ये मदत करीन. मी तुमची कशी मदत करू शकतो?',
+    chatbotThinking: 'विचार करत आहे...',
+    chatbotPlaceholder: 'तुमचा संदेश टाइप करा...',
+    chatbotHome: 'होम',
+    chatbotMainMenu: 'मुख्य मेनू',
+    chatbotChangeLanguage: 'भाषा बदला',
   },
   
   ta: {
@@ -317,7 +361,58 @@ export const translations = {
     multilingual: 'பல மொழி ஆதரவு',
     multilingualDesc: 'சிறந்த அணுகலுக்காக பல பிராந்திய மொழிகளில் கிடைக்கிறது',
     quickResults: 'விரைவான முடிவுகள்',
-    quickResultsDesc: 'மணிநேரங்களில் அல்ல, வினாடிகளில் உங்கள் தனிப்பயனாக்கப்பட்ட பரிந்துரைகளைப் பெறுங்கள்'
+    quickResultsDesc: 'மணிநேரங்களில் அல்ல, விநாடிகளில் உங்கள் தனிப்பயனாக்கப்பட்ட பரிந்துரைகளைப் பெறுங்கள்',
+    
+    // Chatbot
+    chatbotWelcome: 'திஷா சாட்பாடுக்கு வணக்கம்! இது உங்கள் விருப்ப மொழியில் வழிகாட்ட உதவும்.',
+    chatbotAssistant: 'இன்டர்ன்ஷிப் துணைவர்',
+    chatbotSelectLanguage: 'தயவு செய்து உங்கள் விருப்பமான மொழியை தேர்ந்தெடுக்கவும்:',
+    chatbotLanguageSelected: 'அருமை! இனி நான் தமிழில் உங்களுக்கு உதவுவேன். நான் உங்களுக்கு எவ்வாறு உதவ முடியும்?',
+    chatbotThinking: 'யோசிக்கிறேன்...',
+    chatbotPlaceholder: 'உங்கள் சந்தேசத்தை டைப் செய்யவும்...',
+    chatbotHome: 'வீடு',
+    chatbotMainMenu: 'முக்கிய மேனி',
+    chatbotChangeLanguage: 'மொழியை மாற்றவும்',
+  },
+  
+  ur: {
+    // Navbar
+    home: 'گھر',
+    features: 'خصوصیات',
+    howItWorks: 'یہ کیسے کام کرتا ہے',
+    find: 'انٹرن شپ تلاش کریں',
+    faq: 'عام سوالات',
+    contact: 'رابطہ',
+    language: 'زبان',
+    
+    // Hero Section
+    heroTitle: 'AI پر مبنی انٹرن شپ سفارشات انجن',
+    heroSubtitle: 'PM انٹرن شپ اسکیم کے ذریعے آپ کے لیے بہترین انٹرن شپ کے مواقع تلاش کریں',
+    heroDescription: 'آپ کی تعلیم، ہنر، دلچسپی اور مقام کی بنیاد پر ذاتی انٹرن شپ کی سفارشات حاصل کریں۔ خاص طور پر دیہاتی اور ابھرتے ہوئے ٹیلنٹ کے لیے بنایا گیا۔',
+    getStarted: 'شروع کریں',
+    learnMore: 'مزید جانیں',
+    
+    // Features
+    featuresTitle: 'ہمارا سفارشات انجن کیوں منتخب کریں؟',
+    smartMatching: 'اسمارٹ میچنگ',
+    smartMatchingDesc: 'AI سے چلنے والا ایلگوریدم آپ کے پروفائل کی بنیاد پر آپ کو سب سے مناسب انٹرن شپ سے جوڑتا ہے',
+    ruralFriendly: 'دیہاتی دوست',
+    ruralFriendlyDesc: 'آسان، استعمال میں آسان انٹرفیس کے ساتھ خاص طور پر دیہاتی علاقوں کے امیدواروں کے لیے ڈیزائن کیا گیا',
+    multilingual: 'کئی زبانوں کی حمایت',
+    multilingualDesc: 'بہتر رسائی کے لیے کئی علاقائی زبانوں میں دستیاب',
+    quickResults: 'تیز نتائج',
+    quickResultsDesc: 'گھنٹوں میں نہیں، سیکنڈوں میں آپ کی ذاتی سفارشات حاصل کریں',
+    
+    // Chatbot
+    chatbotWelcome: 'دشا چیٹ باٹ میں خوش آمدید! یہ آپ کی پسندیدہ زبان میں رہنمائی کرنے میں مدد کرے گا۔',
+    chatbotAssistant: 'انٹرن شپ اسسٹنٹ',
+    chatbotSelectLanguage: 'براہ کرم آپ کی پسندیدہ زبان منتخب کریں:',
+    chatbotLanguageSelected: 'بہترین! میں اب آپ کی اردو میں مدد کروں گا۔ میں آپ کی کیسے مدد کر سکتا ہوں؟',
+    chatbotThinking: 'سوچ رہا ہوں...',
+    chatbotPlaceholder: 'اپنا پیغام ٹائپ کریں...',
+    chatbotHome: 'ہوم',
+    chatbotMainMenu: 'مین مینو',
+    chatbotChangeLanguage: 'زبان تبدیل کریں',
   }
 };
 
