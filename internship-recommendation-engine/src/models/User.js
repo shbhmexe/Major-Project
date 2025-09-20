@@ -88,7 +88,25 @@ export default class User {
    * @param {Object} db - MongoDB database instance
    */
   static async createIndexes(db) {
-    await db.collection('users').createIndex({ email: 1 }, { unique: true, sparse: true });
-    await db.collection('users').createIndex({ phoneNumber: 1 }, { unique: true, sparse: true });
+    try {
+      // Check if indexes already exist before creating them
+      const existingIndexes = await db.collection('users').listIndexes().toArray();
+      const indexNames = existingIndexes.map(index => index.name);
+      
+      // Create email index only if it doesn't exist
+      if (!indexNames.includes('email_1')) {
+        await db.collection('users').createIndex({ email: 1 }, { unique: true, sparse: true });
+        console.log('Created email index');
+      }
+      
+      // Create phoneNumber index only if it doesn't exist
+      if (!indexNames.includes('phoneNumber_1')) {
+        await db.collection('users').createIndex({ phoneNumber: 1 }, { unique: true, sparse: true });
+        console.log('Created phoneNumber index');
+      }
+    } catch (error) {
+      // If indexes already exist or there's a conflict, just log and continue
+      console.log('Indexes already exist or error creating indexes:', error.message);
+    }
   }
 }

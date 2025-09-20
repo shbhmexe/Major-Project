@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import clientPromise from '@/lib/mongodb';
 import User from '@/models/User';
+import emailService from '@/lib/emailService';
 
 /**
  * Create or update a user in MongoDB
@@ -34,6 +35,8 @@ export async function POST(request) {
     
     let user;
     
+    let welcomeEmailSent = false;
+    
     if (existingUser) {
       // Update existing user
       const updateData = {};
@@ -44,11 +47,23 @@ export async function POST(request) {
       
       user = await User.update(db, existingUser._id, updateData);
       
+      // Send welcome email to existing users too (on every login/signup)
+      if (email) {
+        try {
+          await emailService.sendWelcomeEmail(email, displayName || existingUser.displayName);
+          welcomeEmailSent = true;
+          console.log(`Welcome email sent to existing user: ${email}`);
+        } catch (emailError) {
+          console.error(`Failed to send welcome email to ${email}:`, emailError.message);
+        }
+      }
+      
       return NextResponse.json({ 
         success: true, 
         message: 'User updated successfully',
         user,
-        isNewUser: false
+        isNewUser: false,
+        welcomeEmailSent
       });
     } else {
       // Create new user
@@ -61,11 +76,25 @@ export async function POST(request) {
         profileComplete
       });
       
+      // Send welcome email for new users (only if email is provided)
+      if (email) {
+        try {
+          await emailService.sendWelcomeEmail(email, displayName);
+          welcomeEmailSent = true;
+          console.log(`Welcome email sent to new user: ${email}`);
+        } catch (emailError) {
+          // Log the error but don't fail user creation
+          console.error(`Failed to send welcome email to ${email}:`, emailError.message);
+          // We don't return error here because user creation should succeed even if email fails
+        }
+      }
+      
       return NextResponse.json({ 
         success: true, 
         message: 'User created successfully',
         user,
-        isNewUser: true
+        isNewUser: true,
+        welcomeEmailSent
       });
     }
   } catch (error) {
