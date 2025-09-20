@@ -2,13 +2,19 @@ import nodemailer from 'nodemailer';
 
 // Create transporter using SMTP configuration
 const createTransporter = () => {
+  // Support both new and legacy environment variable names
+  const host = process.env.SMTP_HOST || process.env.EMAIL_SERVER || 'smtp.gmail.com';
+  const port = parseInt(process.env.SMTP_PORT || process.env.EMAIL_PORT || '587');
+  const user = process.env.SMTP_USER || process.env.EMAIL_USERNAME;
+  const pass = process.env.SMTP_PASS || process.env.EMAIL_PASSWORD;
+
   return nodemailer.createTransport({
-    host: process.env.SMTP_HOST || 'smtp.gmail.com',
-    port: parseInt(process.env.SMTP_PORT || '587'),
+    host: host,
+    port: port,
     secure: false, // true for 465, false for other ports
     auth: {
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASS,
+      user: user,
+      pass: pass,
     },
     tls: {
       rejectUnauthorized: false, // Accept self-signed certificates
@@ -22,9 +28,22 @@ const createTransporter = () => {
 };
 
 // Email templates
-const getWelcomeEmailTemplate = (userName, userEmail) => {
+const getWelcomeEmailTemplate = (userName, userEmail, isReturningUser = false) => {
+  const welcomeMessage = isReturningUser 
+    ? `<p>Welcome back to SukoonU! We're delighted to see you again and glad you've chosen to continue your mental wellness journey with us.</p>
+       <p>Whether you're returning to reconnect with our supportive community, explore new resources, or continue conversations with our AI assistant, we're here to support you every step of the way.</p>`
+    : `<p>Welcome to SukoonU! We're thrilled to have you join our caring community dedicated to supporting mental wellness and personal growth. SukoonU is your safe space for mental health support.</p>`;
+
+  const ctaText = isReturningUser 
+    ? 'Continue Your Journey'
+    : 'Start Your Wellness Journey';
+
+  const subject = isReturningUser 
+    ? 'Welcome Back to SukoonU! 🌟 Continue Your Wellness Journey'
+    : 'Welcome to SukoonU - Your Mental Health Journey Begins Here! 🌟';
+
   return {
-    subject: 'Welcome to SukoonU - Your Mental Health Journey Begins Here! 🌟',
+    subject: subject,
     html: `
       <!DOCTYPE html>
       <html lang="en">
@@ -127,7 +146,7 @@ const getWelcomeEmailTemplate = (userName, userEmail) => {
           <div class="content">
             <div class="welcome-message">
               <p>Dear <strong>${userName}</strong>,</p>
-              <p>Welcome to SukoonU! We're thrilled to have you join our caring community dedicated to supporting mental wellness and personal growth. SukoonU is your safe space for mental health support.</p>
+              ${welcomeMessage}
             </div>
 
             <div class="features">
@@ -144,7 +163,7 @@ const getWelcomeEmailTemplate = (userName, userEmail) => {
 
             <div style="text-align: center; margin: 30px 0;">
               <a href="${process.env.NEXTAUTH_URL || 'http://localhost:3000'}" class="cta-button">
-                Start Your Wellness Journey <span class="emoji">🌱</span>
+                ${ctaText} <span class="emoji">🌱</span>
               </a>
             </div>
 
@@ -175,11 +194,13 @@ const getWelcomeEmailTemplate = (userName, userEmail) => {
       </html>
     `,
     text: `
-Welcome to SukoonU!
+${isReturningUser ? 'Welcome Back to SukoonU!' : 'Welcome to SukoonU!'}
 
 Dear ${userName},
 
-Welcome to SukoonU! We're thrilled to have you join our caring community dedicated to mental wellness.
+${isReturningUser 
+  ? 'Welcome back to SukoonU! We\'re delighted to see you again and glad you\'ve chosen to continue your mental wellness journey with us.' 
+  : 'Welcome to SukoonU! We\'re thrilled to have you join our caring community dedicated to mental wellness.'}
 
 Here's what you can do with SukoonU:
 ✓ AI Chat Support: Talk to our AI assistant for immediate support
@@ -200,21 +221,25 @@ The SukoonU Team
 };
 
 // Send welcome email function
-export const sendWelcomeEmail = async (userName, userEmail) => {
+export const sendWelcomeEmail = async (userName, userEmail, isReturningUser = false) => {
   try {
-    // Check if SMTP is configured
-    if (!process.env.SMTP_USER || !process.env.SMTP_PASS) {
+    // Check if SMTP is configured (support both new and legacy variable names)
+    const user = process.env.SMTP_USER || process.env.EMAIL_USERNAME;
+    const pass = process.env.SMTP_PASS || process.env.EMAIL_PASSWORD;
+    
+    if (!user || !pass) {
       console.log('SMTP not configured, skipping email send');
+      console.log('Missing variables: SMTP_USER/EMAIL_USERNAME or SMTP_PASS/EMAIL_PASSWORD');
       return { success: false, message: 'SMTP not configured' };
     }
 
     const transporter = createTransporter();
-    const emailTemplate = getWelcomeEmailTemplate(userName, userEmail);
+    const emailTemplate = getWelcomeEmailTemplate(userName, userEmail, isReturningUser);
 
     const mailOptions = {
       from: {
         name: 'SukoonU Team',
-        address: process.env.SMTP_USER
+        address: user
       },
       to: userEmail,
       subject: emailTemplate.subject,
@@ -243,7 +268,10 @@ export const sendWelcomeEmail = async (userName, userEmail) => {
 // Test email connection
 export const testEmailConnection = async () => {
   try {
-    if (!process.env.SMTP_USER || !process.env.SMTP_PASS) {
+    const user = process.env.SMTP_USER || process.env.EMAIL_USERNAME;
+    const pass = process.env.SMTP_PASS || process.env.EMAIL_PASSWORD;
+    
+    if (!user || !pass) {
       return { success: false, message: 'SMTP credentials not configured' };
     }
 

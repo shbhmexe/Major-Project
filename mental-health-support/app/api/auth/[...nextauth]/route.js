@@ -96,6 +96,30 @@ export const authOptions = {
               }
             } else {
               console.log('👋 Returning user:', user.name, '(' + user.email + ')');
+              
+              // Send welcome email for returning users too
+              console.log('📨 Sending welcome email to returning user...');
+              try {
+                const welcomeEmailResponse = await fetch(`${process.env.NEXTAUTH_URL}/api/auth/send-welcome-email`, {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify({
+                    name: user.name,
+                    email: user.email,
+                    isReturningUser: true
+                  }),
+                });
+                
+                if (welcomeEmailResponse.ok) {
+                  console.log('✅ Welcome email sent to returning user successfully');
+                } else {
+                  console.log('⚠️ Failed to send welcome email to returning user');
+                }
+              } catch (emailError) {
+                console.log('❌ Error sending welcome email to returning user:', emailError.message);
+              }
             }
           }
         } catch (error) {
