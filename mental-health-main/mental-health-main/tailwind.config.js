@@ -1,9 +1,8 @@
-/** @type {import('tailwindcss').Config} */
-module.exports = {
-  // ... your existing config
+import { Config } from 'tailwindcss'
+
+const config = {
   theme: {
     extend: {
-      // ... your existing extend settings
       colors: {
         'neon-primary': 'hsl(var(--primary))',
       },
@@ -22,5 +21,6 @@ module.exports = {
       },
     },
   },
-  // ... your existing plugins
-}
+} satisfies Config
+
+export default config
