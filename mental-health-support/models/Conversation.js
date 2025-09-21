@@ -18,8 +18,7 @@ const MessageSchema = new mongoose.Schema({
 
 const ConversationSchema = new mongoose.Schema({
   userId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
+    type: String, // Changed to String to support Google OAuth IDs
     required: false // Allow anonymous conversations
   },
   guestId: {
