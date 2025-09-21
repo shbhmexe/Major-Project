@@ -25,6 +25,7 @@ import { Heart, User, Shield } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/contexts/auth-context";
 
 export default function SignUpPage() {
   const [role, setRole] = useState<"student" | "admin">("student");
@@ -42,6 +43,7 @@ export default function SignUpPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const router = useRouter();
+  const { login } = useAuth();
 
   const handleInputChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -93,6 +95,8 @@ export default function SignUpPage() {
       const loginData = await loginResponse.json();
 
       if (loginData.success) {
+        // Save user in context
+        login(loginData.user);
         router.push("/dashboard"); // Redirect to dashboard
       } else {
         setError(

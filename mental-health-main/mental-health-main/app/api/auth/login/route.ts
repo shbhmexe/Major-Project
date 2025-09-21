@@ -40,10 +40,10 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       user: {
-        id: user.id,
+        id: user.id.toString(),
         email: user.email,
         name: `${user.firstName} ${user.lastName}`,
-        role: user.role,
+        role: user.role.toLowerCase(),
       },
     });
   } catch (error) {

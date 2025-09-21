@@ -108,9 +108,6 @@ export default function LoginPage() {
         // Save user in context
         login(data.user);
 
-        // Optional: store JWT in sessionStorage for API requests
-        if (data.token) sessionStorage.setItem("token", data.token);
-
         // Redirect to dashboard based on role
         router.push(data.user.role === "student" ? "/dashboard" : "/administrator");
       } else {

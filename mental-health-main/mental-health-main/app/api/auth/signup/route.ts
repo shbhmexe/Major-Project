@@ -26,10 +26,10 @@ export async function POST(request: NextRequest) {
       lastName,
       email,
       password:hashedPassword,
-      role:role.toUpperCase(),
+      role: role.toUpperCase() as 'STUDENT' | 'ADMIN',
       college: college || null,
       department: department || null,
-      academicYear: academicYear || null,
+      academicYear: academicYear ? academicYear.toUpperCase() as 'FIRST' | 'SECOND' | 'THIRD' | 'FOURTH' : null,
     },
    });
 
