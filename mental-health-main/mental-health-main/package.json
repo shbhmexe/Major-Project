@@ -4,9 +4,11 @@
   "private": true,
   "scripts": {
     "build": "prisma generate && next build",
+    "build:prod": "cp prisma/schema.production.prisma prisma/schema.prisma && prisma generate && next build",
     "dev": "next dev",
     "lint": "next lint",
-    "start": "next start"
+    "start": "next start",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",

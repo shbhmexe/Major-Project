@@ -1,0 +1,37 @@
+// Production Prisma schema file for PostgreSQL
+// This is used for Vercel deployments
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           Int      @id @default(autoincrement())
+  firstName    String
+  lastName     String
+  email        String   @unique
+  password     String
+  role         Role     @default(STUDENT)
+  college      String?
+  department   String?
+  academicYear AcademicYear?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+enum Role {
+  STUDENT
+  ADMIN
+}
+
+enum AcademicYear {
+  FIRST
+  SECOND
+  THIRD
+  FOURTH
+}
