@@ -2,7 +2,15 @@
   "buildCommand": "cp prisma/schema.production.prisma prisma/schema.prisma && prisma generate && next build",
   "installCommand": "npm install",
   "env": {
-    "JWT_SECRET": "sukoon-mental-health-platform-super-secure-jwt-secret-key-2024",
-    "NEXTAUTH_SECRET": "sukoon-nextauth-super-secure-secret-key-2024-production"
+    "JWT_SECRET": "sukoon-mental-health-platform-super-secure-jwt-secret-key-2024-production",
+    "NEXTAUTH_SECRET": "sukoon-nextauth-super-secure-secret-key-2024-production-vercel",
+    "NEXTAUTH_URL": "https://manishkaproject.vercel.app",
+    "NEXT_PUBLIC_APP_URL": "https://manishkaproject.vercel.app",
+    "NODE_ENV": "production"
+  },
+  "functions": {
+    "app/api/**/*.ts": {
+      "maxDuration": 30
+    }
   }
 }
