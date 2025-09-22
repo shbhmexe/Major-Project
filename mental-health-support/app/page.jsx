@@ -65,7 +65,7 @@ export default function HomePage() {
   }, [isAuthenticated, isGuest, user, router]);
   
   return (
-    <div className="min-h-screen bg-gradient-to-br from-teal-50 to-blue-50 dark:from-gray-900 dark:to-gray-800 relative overflow-x-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-teal-50 md:from-teal-50 to-blue-50 md:to-blue-50 dark:from-gray-900/80 md:dark:from-gray-900 dark:to-gray-800/80 md:dark:to-gray-800 relative overflow-x-hidden">
       {/* Navigation - Doctor Themed */}
       <nav className="bg-white dark:bg-gray-800 shadow-md border-b-2 border-teal-100 dark:border-teal-900 relative z-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
