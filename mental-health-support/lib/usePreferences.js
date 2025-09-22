@@ -12,10 +12,12 @@ export function usePreferences() {
     language: 'en',
     notificationsEnabled: true,
     soundEnabled: true,
+    textToSpeechEnabled: true,
     customPrompt: ''
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [hasFetched, setHasFetched] = useState(false);
 
   // Generate a guest ID for anonymous users
   const getGuestId = useCallback(() => {
@@ -50,6 +52,7 @@ export function usePreferences() {
       
       const data = await response.json();
       setPreferences(data.preferences);
+      setHasFetched(true);
       
       // Also store in localStorage for faster access
       localStorage.setItem('mh_preferences', JSON.stringify(data.preferences));
@@ -71,11 +74,22 @@ export function usePreferences() {
         }
       }
       
-      return preferences; // Return current state as fallback
+      // Return default preferences as fallback
+      const defaultPrefs = {
+        theme: 'system',
+        fontSize: 'medium',
+        aiResponseStyle: 'supportive',
+        language: 'en',
+        notificationsEnabled: true,
+        soundEnabled: true,
+        textToSpeechEnabled: true,
+        customPrompt: ''
+      };
+      return defaultPrefs;
     } finally {
       setLoading(false);
     }
-  }, [isAuthenticated, isGuest, user, getGuestId, preferences]);
+  }, [isAuthenticated, isGuest, user, getGuestId]);
 
   // Update user preferences
   const updatePreferences = useCallback(async (newPreferences) => {
@@ -172,10 +186,12 @@ export function usePreferences() {
 
   // Initialize preferences from localStorage or fetch from server
   useEffect(() => {
+    let isMounted = true;
+    
     const initPreferences = async () => {
       // Try to load from localStorage first for faster initial load
       const storedPrefs = localStorage.getItem('mh_preferences');
-      if (storedPrefs) {
+      if (storedPrefs && isMounted) {
         try {
           setPreferences(JSON.parse(storedPrefs));
         } catch (e) {
@@ -183,14 +199,18 @@ export function usePreferences() {
         }
       }
       
-      // Then fetch from server to ensure we have the latest
-      if (isAuthenticated || isGuest) {
+      // Then fetch from server to ensure we have the latest (only if we haven't fetched yet)
+      if ((isAuthenticated || isGuest) && isMounted && !hasFetched) {
         await fetchPreferences();
       }
     };
     
     initPreferences();
-  }, [isAuthenticated, isGuest, fetchPreferences]);
+    
+    return () => {
+      isMounted = false;
+    };
+  }, [isAuthenticated, isGuest, hasFetched, fetchPreferences]);
 
   // Apply theme and font size whenever preferences change
   useEffect(() => {

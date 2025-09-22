@@ -25,7 +25,9 @@ export default function ChatPage() {
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [isPreferencesPanelOpen, setIsPreferencesPanelOpen] = useState(false);
+  const [speakingMessageId, setSpeakingMessageId] = useState(null);
   const messagesEndRef = useRef(null);
+  const speechSynthesisRef = useRef(null);
   
   // Use conversation hook for persistence
   const {
@@ -84,7 +86,7 @@ export default function ChatPage() {
     if (currentConversation) {
       setMessages(currentConversation.messages.map(msg => ({
         id: msg._id || msg.id,
-        type: msg.role,
+        type: msg.role || msg.type, // Fix: use both role and type
         content: msg.content,
         timestamp: msg.timestamp
       })));
@@ -147,6 +149,13 @@ export default function ChatPage() {
           if (preferences.soundEnabled && index === 0) {
             playMessageSound();
           }
+
+          // Auto-play text-to-speech for AI responses (first message only)
+          if (index === 0 && preferences.textToSpeechEnabled) {
+            setTimeout(() => {
+              speakText(responseContent, aiMessage.id);
+            }, 500); // Small delay to ensure message is rendered
+          }
           
           // Set typing to false after last message
           if (index === aiResponses.length - 1) {
@@ -187,12 +196,82 @@ export default function ChatPage() {
       try {
         const audio = new Audio('/sounds/message.mp3');
         audio.volume = 0.5;
-        audio.play().catch(e => console.log('Audio play failed:', e));
+        audio.play().catch(e => {
+          // Silently fail if sound file is missing
+          console.debug('Audio play failed (sound file may be missing):', e);
+        });
       } catch (error) {
-        console.error('Failed to play sound:', error);
+        console.debug('Failed to play sound (sound file may be missing):', error);
       }
     }
   };
+
+  // Text-to-speech function
+  const speakText = (text, messageId) => {
+    if (typeof window === 'undefined' || !('speechSynthesis' in window)) {
+      console.log('Speech synthesis not supported');
+      return;
+    }
+
+    // Stop any ongoing speech
+    window.speechSynthesis.cancel();
+    
+    if (speakingMessageId === messageId) {
+      // If already speaking this message, stop it
+      setSpeakingMessageId(null);
+      return;
+    }
+
+    const utterance = new SpeechSynthesisUtterance(text);
+    
+    // Configure speech
+    utterance.rate = 0.9;
+    utterance.pitch = 1;
+    utterance.volume = 0.8;
+    
+    // Try to use a female voice for more comforting mental health support
+    const voices = window.speechSynthesis.getVoices();
+    const femaleVoice = voices.find(voice => 
+      voice.name.toLowerCase().includes('female') || 
+      voice.name.toLowerCase().includes('zira') ||
+      voice.name.toLowerCase().includes('hazel')
+    ) || voices.find(voice => voice.lang.startsWith('en'));
+    
+    if (femaleVoice) {
+      utterance.voice = femaleVoice;
+    }
+
+    utterance.onstart = () => {
+      setSpeakingMessageId(messageId);
+    };
+
+    utterance.onend = () => {
+      setSpeakingMessageId(null);
+    };
+
+    utterance.onerror = () => {
+      setSpeakingMessageId(null);
+      console.log('Speech synthesis error');
+    };
+
+    speechSynthesisRef.current = utterance;
+    window.speechSynthesis.speak(utterance);
+  };
+
+  // Stop speech function
+  const stopSpeech = () => {
+    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+      setSpeakingMessageId(null);
+    }
+  };
+
+  // Cleanup speech on unmount
+  useEffect(() => {
+    return () => {
+      stopSpeech();
+    };
+  }, []);
   
   // Save conversation to database
   const saveConversation = async (newMessages) => {
@@ -290,7 +369,7 @@ export default function ChatPage() {
                 >
                   <div 
                     className={cn(
-                      "max-w-[80%] rounded-lg p-4",
+                      "max-w-[80%] rounded-lg p-4 relative",
                       message.type === 'user' 
                         ? "bg-blue-600 text-white" 
                         : "bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 shadow-sm"
@@ -301,6 +380,34 @@ export default function ChatPage() {
                       className="text-sm md:text-base" 
                       duration={0.3}
                     />
+                    
+                    {/* Speaker button for AI messages */}
+                    {message.type === 'ai' && (
+                      <button
+                        onClick={() => speakText(message.content, message.id)}
+                        className={cn(
+                          "absolute top-2 right-2 p-1 rounded-full transition-colors",
+                          speakingMessageId === message.id
+                            ? "bg-blue-500 text-white animate-pulse"
+                            : "bg-gray-200 dark:bg-gray-600 text-gray-600 dark:text-gray-300 hover:bg-blue-500 hover:text-white"
+                        )}
+                        title={speakingMessageId === message.id ? "Stop speaking" : "Listen to message"}
+                      >
+                        <svg 
+                          xmlns="http://www.w3.org/2000/svg" 
+                          className="h-4 w-4" 
+                          fill="none" 
+                          viewBox="0 0 24 24" 
+                          stroke="currentColor"
+                        >
+                          {speakingMessageId === message.id ? (
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          ) : (
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 14.142M9 9v6l4-3-4-3z" />
+                          )}
+                        </svg>
+                      </button>
+                    )}
                   </div>
                 </div>
               ))}

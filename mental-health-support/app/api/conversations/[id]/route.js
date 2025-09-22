@@ -7,7 +7,7 @@ export async function GET(request, { params }) {
   try {
     await dbConnect();
     
-    const { id } = params;
+    const { id } = await params;
     
     const conversation = await Conversation.findById(id);
     
@@ -27,7 +27,7 @@ export async function PATCH(request, { params }) {
   try {
     await dbConnect();
     
-    const { id } = params;
+    const { id } = await params;
     const body = await request.json();
     const { messages, title } = body;
     
@@ -62,7 +62,7 @@ export async function DELETE(request, { params }) {
   try {
     await dbConnect();
     
-    const { id } = params;
+    const { id } = await params;
     
     const result = await Conversation.findByIdAndDelete(id);
     

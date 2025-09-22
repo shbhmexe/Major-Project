@@ -2,7 +2,12 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 
 // Initialize the Gemini API client with server-side environment variable
 const geminiApiKey = process.env.GEMINI_API_KEY;
-const genAI = new GoogleGenerativeAI(geminiApiKey);
+
+if (!geminiApiKey) {
+  console.error('GEMINI_API_KEY is not set in environment variables');
+}
+
+const genAI = geminiApiKey ? new GoogleGenerativeAI(geminiApiKey) : null;
 
 // Base context for mental health support
 const BASE_SYSTEM_PROMPT = `
@@ -33,7 +38,28 @@ const RESPONSE_STYLES = {
 
 export async function POST(request) {
   try {
-    const { message, responseStyle = 'supportive', customPrompt = '' } = await request.json();
+    // Check if API key is available
+    if (!genAI) {
+      return new Response(JSON.stringify({ 
+        error: 'Gemini API is not configured. Please check server configuration.' 
+      }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+    
+    let requestBody;
+    try {
+      requestBody = await request.json();
+    } catch (error) {
+      console.error('Failed to parse request JSON:', error);
+      return new Response(JSON.stringify({ error: 'Invalid JSON in request body' }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+    
+    const { message, responseStyle = 'supportive', customPrompt = '' } = requestBody;
     
     if (!message) {
       return new Response(JSON.stringify({ error: 'Message is required' }), {

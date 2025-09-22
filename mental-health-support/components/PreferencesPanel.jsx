@@ -139,6 +139,21 @@ export function PreferencesPanel({ isOpen, onClose }) {
               </label>
             </div>
             
+            {/* Text-to-Speech Toggle */}
+            <div className="flex items-center">
+              <input
+                type="checkbox"
+                id="textToSpeechEnabled"
+                name="textToSpeechEnabled"
+                checked={localPreferences.textToSpeechEnabled}
+                onChange={handleChange}
+                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+              />
+              <label htmlFor="textToSpeechEnabled" className="ml-2 block text-sm text-gray-700 dark:text-gray-300">
+                Enable Text-to-Speech (AI responses will be spoken automatically)
+              </label>
+            </div>
+            
             {/* Custom Prompt */}
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
