@@ -16,35 +16,35 @@ export default function Hero({ language }) {
   };
 
   return (
-    <section id="hero" className="relative min-h-screen flex items-center justify-center pt-16">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <section id="hero" className="relative min-h-screen flex items-center justify-center pt-16 tablet:pt-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 tablet:px-8 lg:px-8 text-center">
         <div className="max-w-4xl mx-auto">
           {/* Badge */}
-          <div className="inline-flex items-center px-4 py-2 rounded-full bg-purple-500/20 border border-purple-400/30 text-purple-200 text-sm font-medium mb-8">
+          <div className="inline-flex items-center px-4 py-2 rounded-full bg-purple-500/20 border border-purple-400/30 text-purple-200 text-sm tablet:text-base font-medium mb-8 tablet:mb-10">
             <Zap className="w-4 h-4 mr-2" />
             Powered by AI Technology
           </div>
           
           {/* Main Heading */}
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
+          <h1 className="text-4xl sm:text-5xl tablet:text-5xl lg:text-6xl font-bold text-white mb-6 tablet:mb-8 leading-tight">
             {t('heroTitle', language)}
           </h1>
           
           {/* Subtitle */}
-          <h2 className="text-xl sm:text-2xl text-purple-200 mb-6 font-medium">
+          <h2 className="text-xl sm:text-2xl tablet:text-2xl text-purple-200 mb-6 tablet:mb-8 font-medium">
             {t('heroSubtitle', language)}
           </h2>
           
           {/* Description */}
-          <p className="text-lg text-gray-300 mb-12 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-lg tablet:text-xl text-gray-300 mb-12 tablet:mb-16 max-w-3xl mx-auto leading-relaxed">
             {t('heroDescription', language)}
           </p>
           
           {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+          <div className="flex flex-col sm:flex-row tablet:flex-row gap-4 tablet:gap-6 justify-center items-center">
             <button
               onClick={navigateToRegister}
-              className="group inline-flex items-center px-8 py-4 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold rounded-full hover:from-purple-700 hover:to-blue-700 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl"
+              className="group inline-flex items-center px-8 tablet:px-10 py-4 tablet:py-5 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold rounded-full hover:from-purple-700 hover:to-blue-700 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl"
             >
               {t('getStarted', language)}
               <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -54,7 +54,7 @@ export default function Hero({ language }) {
               href="https://pminternship.mca.gov.in/login/"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold rounded-full hover:from-green-700 hover:to-emerald-700 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl"
+              className="inline-flex items-center px-8 tablet:px-10 py-4 tablet:py-5 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold rounded-full hover:from-green-700 hover:to-emerald-700 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl"
             >
               Official PM Portal
               <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -62,25 +62,25 @@ export default function Hero({ language }) {
             
             <button
               onClick={navigateToLogin}
-              className="inline-flex items-center px-8 py-4 bg-white/10 backdrop-blur-sm text-white font-semibold rounded-full border border-white/20 hover:bg-white/20 transition-all duration-200"
+              className="inline-flex items-center px-8 tablet:px-10 py-4 tablet:py-5 bg-white/10 backdrop-blur-sm text-white font-semibold rounded-full border border-white/20 hover:bg-white/20 transition-all duration-200"
             >
               {t('learnMore', language)}
             </button>
           </div>
           
           {/* Statistics */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16 max-w-4xl mx-auto">
+          <div className="grid grid-cols-1 tablet:grid-cols-3 md:grid-cols-3 gap-8 tablet:gap-12 mt-16 tablet:mt-20 max-w-4xl mx-auto">
             <div className="text-center">
-              <div className="text-3xl sm:text-4xl font-bold text-white mb-2">10,000+</div>
-              <div className="text-gray-300">Active Internships</div>
+              <div className="text-3xl sm:text-4xl tablet:text-5xl font-bold text-white mb-2 tablet:mb-3">10,000+</div>
+              <div className="text-gray-300 tablet:text-lg">Active Internships</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl sm:text-4xl font-bold text-white mb-2">95%</div>
-              <div className="text-gray-300">Match Accuracy</div>
+              <div className="text-3xl sm:text-4xl tablet:text-5xl font-bold text-white mb-2 tablet:mb-3">95%</div>
+              <div className="text-gray-300 tablet:text-lg">Match Accuracy</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl sm:text-4xl font-bold text-white mb-2">50,000+</div>
-              <div className="text-gray-300">Successful Placements</div>
+              <div className="text-3xl sm:text-4xl tablet:text-5xl font-bold text-white mb-2 tablet:mb-3">50,000+</div>
+              <div className="text-gray-300 tablet:text-lg">Successful Placements</div>
             </div>
           </div>
         </div>

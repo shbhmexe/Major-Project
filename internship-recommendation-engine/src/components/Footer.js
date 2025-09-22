@@ -22,27 +22,27 @@ export default function Footer({ language }) {
 
   return (
     <footer className="bg-black/40 backdrop-blur-sm border-t border-white/10">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 tablet:px-8 lg:px-8 py-12 tablet:py-16">
+        <div className="grid grid-cols-1 tablet:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-8 tablet:gap-12">
           {/* Brand Section */}
-          <div className="lg:col-span-2">
-            <div className="flex items-center space-x-3 mb-6">
-              <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-blue-500 rounded-xl flex items-center justify-center">
-                <div className="w-6 h-6 bg-white rounded-full"></div>
+          <div className="tablet:col-span-2 lg:col-span-2">
+            <div className="flex items-center space-x-3 mb-6 tablet:mb-8">
+              <div className="w-12 h-12 tablet:w-16 tablet:h-16 bg-gradient-to-br from-purple-500 to-blue-500 rounded-xl flex items-center justify-center">
+                <div className="w-6 h-6 tablet:w-8 tablet:h-8 bg-white rounded-full"></div>
               </div>
               <div>
-                <div className="text-xl font-bold text-white">Interndisha</div>
-                <div className="text-sm text-gray-400">Recommendation Engine</div>
+                <div className="text-xl tablet:text-2xl font-bold text-white">Interndisha</div>
+                <div className="text-sm tablet:text-base text-gray-400">Recommendation Engine</div>
               </div>
             </div>
             
-            <p className="text-gray-300 mb-6 max-w-md leading-relaxed">
+            <p className="text-gray-300 tablet:text-lg mb-6 tablet:mb-8 max-w-md leading-relaxed">
               Empowering rural and emerging talent through AI-powered internship recommendations. 
               Find your perfect career opportunity with the PM Internship Scheme.
             </p>
 
-            <div className="flex items-center space-x-2 text-sm text-gray-400 mb-6">
-              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+            <div className="flex items-center space-x-2 text-sm tablet:text-base text-gray-400 mb-6 tablet:mb-8">
+              <div className="w-2 h-2 tablet:w-3 tablet:h-3 bg-green-500 rounded-full animate-pulse"></div>
               <span>Serving 29 states & 8 union territories</span>
             </div>
 
@@ -54,9 +54,9 @@ export default function Footer({ language }) {
                     key={index}
                     href={social.href}
                     aria-label={social.label}
-                    className="w-10 h-10 bg-white/10 border border-white/20 rounded-full flex items-center justify-center hover:bg-white/20 transition-colors duration-200 text-gray-300 hover:text-white"
+                    className="w-10 h-10 tablet:w-12 tablet:h-12 bg-white/10 border border-white/20 rounded-full flex items-center justify-center hover:bg-white/20 transition-colors duration-200 text-gray-300 hover:text-white"
                   >
-                    <IconComponent className="w-5 h-5" />
+                    <IconComponent className="w-5 h-5 tablet:w-6 tablet:h-6" />
                   </a>
                 );
               })}
@@ -65,16 +65,16 @@ export default function Footer({ language }) {
 
           {/* Quick Links */}
           <div>
-            <h3 className="text-lg font-semibold text-white mb-6">
+            <h3 className="text-lg tablet:text-xl font-semibold text-white mb-6 tablet:mb-8">
               {t('quickLinks', language)}
             </h3>
-            <ul className="space-y-4">
+            <ul className="space-y-4 tablet:space-y-5">
               {quickLinks.map((link, index) => (
                 <li key={index}>
                   <a
                     href={link.href}
                     {...(link.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-                    className={`text-gray-300 hover:text-white transition-colors duration-200 flex items-center group ${
+                    className={`text-gray-300 tablet:text-lg hover:text-white transition-colors duration-200 flex items-center group ${
                       link.external ? 'text-green-300 hover:text-green-200' : ''
                     }`}
                   >
@@ -88,10 +88,10 @@ export default function Footer({ language }) {
 
           {/* Contact Info */}
           <div>
-            <h3 className="text-lg font-semibold text-white mb-6">
+            <h3 className="text-lg tablet:text-xl font-semibold text-white mb-6 tablet:mb-8">
               {t('contact', language)}
             </h3>
-            <div className="space-y-4 text-gray-300">
+            <div className="space-y-4 tablet:space-y-5 text-gray-300 tablet:text-lg">
               <div>
                 <div className="font-medium text-white mb-1">Email</div>
                 <a 
@@ -124,13 +124,13 @@ export default function Footer({ language }) {
         </div>
 
         {/* Bottom Section */}
-        <div className="border-t border-white/10 mt-12 pt-8">
-          <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-            <div className="text-gray-400 text-sm">
+        <div className="border-t border-white/10 mt-12 tablet:mt-16 pt-8 tablet:pt-10">
+          <div className="flex flex-col tablet:flex-row md:flex-row justify-between items-center space-y-4 tablet:space-y-0 md:space-y-0">
+            <div className="text-gray-400 text-sm tablet:text-base">
               © 2024 PM Internship Scheme. {t('allRightsReserved', language)}
             </div>
             
-            <div className="flex items-center space-x-6 text-sm">
+            <div className="flex items-center space-x-6 text-sm tablet:text-base">
               <a 
                 href="#" 
                 className="text-gray-400 hover:text-white transition-colors duration-200"

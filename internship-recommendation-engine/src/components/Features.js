@@ -33,35 +33,35 @@ export default function Features({ language }) {
   ];
 
   return (
-    <section id="features" className="py-20 bg-black/20 backdrop-blur-sm bg-purple-800">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="features" className="py-20 tablet:py-24 bg-black/20 backdrop-blur-sm bg-purple-800">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 tablet:px-8 lg:px-8">
         {/* Section Header */}
-        <div className="text-center mb-16">
-          <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
+        <div className="text-center mb-16 tablet:mb-20">
+          <h2 className="text-3xl sm:text-4xl tablet:text-5xl font-bold text-white mb-4 tablet:mb-6">
             {t('featuresTitle', language)}
           </h2>
           <div className="w-24 h-1 bg-gradient-to-r from-purple-500 to-blue-500 mx-auto"></div>
         </div>
 
         {/* Features Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 tablet:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-8 tablet:gap-10">
           {features.map((feature, index) => {
             const IconComponent = feature.icon;
             return (
               <div
                 key={index}
-                className="group relative bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-8 hover:bg-white/10 transition-all duration-300 hover:transform hover:-translate-y-2 hover:shadow-2xl"
+                className="group relative bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-8 tablet:p-10 hover:bg-white/10 transition-all duration-300 hover:transform hover:-translate-y-2 hover:shadow-2xl"
               >
                 {/* Icon */}
-                <div className={`w-16 h-16 rounded-xl bg-gradient-to-br ${feature.color} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
-                  <IconComponent className="w-8 h-8 text-white" />
+                <div className={`w-16 h-16 tablet:w-20 tablet:h-20 rounded-xl bg-gradient-to-br ${feature.color} flex items-center justify-center mb-6 tablet:mb-8 group-hover:scale-110 transition-transform duration-300`}>
+                  <IconComponent className="w-8 h-8 tablet:w-10 tablet:h-10 text-white" />
                 </div>
 
                 {/* Content */}
-                <h3 className="text-xl font-semibold text-white mb-4">
+                <h3 className="text-xl tablet:text-2xl font-semibold text-white mb-4 tablet:mb-5">
                   {feature.title}
                 </h3>
-                <p className="text-gray-300 leading-relaxed">
+                <p className="text-gray-300 tablet:text-lg leading-relaxed">
                   {feature.description}
                 </p>
 
@@ -73,8 +73,8 @@ export default function Features({ language }) {
         </div>
 
         {/* Bottom CTA */}
-        <div className="text-center mt-16">
-          <p className="text-gray-300 text-lg mb-6">
+        <div className="text-center mt-16 tablet:mt-20">
+          <p className="text-gray-300 text-lg tablet:text-xl mb-6 tablet:mb-8">
             Ready to find your perfect internship match?
           </p>
           <button
@@ -84,7 +84,7 @@ export default function Features({ language }) {
                 element.scrollIntoView({ behavior: 'smooth' });
               }
             }}
-            className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold rounded-full hover:from-purple-700 hover:to-blue-700 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl"
+            className="inline-flex items-center px-8 tablet:px-10 py-4 tablet:py-5 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold rounded-full hover:from-purple-700 hover:to-blue-700 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl"
           >
             {t('getStarted', language)}
           </button>

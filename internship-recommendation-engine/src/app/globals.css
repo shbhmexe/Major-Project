@@ -97,6 +97,84 @@ textarea:focus {
   }
 }
 
+/* Tablet optimization */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .tablet-padding {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+  
+  .tablet-text-scale {
+    font-size: 1.1em;
+    line-height: 1.6;
+  }
+  
+  .tablet-spacing {
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .tablet-button {
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    border-radius: 12px;
+  }
+  
+  .tablet-grid-2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+  
+  .tablet-grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+  
+  /* Enhanced touch targets for tablets */
+  .tablet-touch-target {
+    min-height: 48px;
+    min-width: 48px;
+  }
+  
+  /* Better form controls for tablets */
+  .tablet-form-control {
+    padding: 1rem;
+    font-size: 1.1rem;
+    border-radius: 12px;
+  }
+  
+  /* Enhanced card spacing for tablets */
+  .tablet-card {
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+    border-radius: 16px;
+  }
+  
+  /* Navigation enhancements for tablets */
+  .tablet-nav {
+    height: 5rem;
+    padding: 0 2rem;
+  }
+  
+  /* Typography scaling for tablets */
+  .tablet-heading-scale h1 {
+    font-size: 3.5rem;
+    line-height: 1.1;
+  }
+  
+  .tablet-heading-scale h2 {
+    font-size: 2.5rem;
+    line-height: 1.2;
+  }
+  
+  .tablet-heading-scale h3 {
+    font-size: 1.75rem;
+    line-height: 1.3;
+  }
+}
+
 /* Accessibility */
 @media (prefers-reduced-motion: reduce) {
   * {

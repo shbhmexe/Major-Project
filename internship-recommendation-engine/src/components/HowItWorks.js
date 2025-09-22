@@ -36,14 +36,14 @@ export default function HowItWorks({ language }) {
   ];
 
   return (
-    <section id="how-it-works" className="py-20 bg-white/5 backdrop-blur-sm">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="how-it-works" className="py-20 tablet:py-24 bg-white/5 backdrop-blur-sm">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 tablet:px-8 lg:px-8">
         {/* Section Header */}
-        <div className="text-center mb-16">
-          <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
+        <div className="text-center mb-16 tablet:mb-20">
+          <h2 className="text-3xl sm:text-4xl tablet:text-5xl font-bold text-white mb-4 tablet:mb-6">
             {t('howItWorksTitle', language)}
           </h2>
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+          <p className="text-xl tablet:text-2xl text-gray-300 max-w-3xl mx-auto">
             Get personalized internship recommendations in just 4 simple steps
           </p>
           <div className="w-24 h-1 bg-gradient-to-r from-purple-500 to-blue-500 mx-auto mt-6"></div>
@@ -94,8 +94,40 @@ export default function HowItWorks({ language }) {
             </div>
           </div>
 
+          {/* Tablet Layout */}
+          <div className="hidden tablet:block lg:hidden">
+            <div className="grid grid-cols-2 gap-8 tablet:gap-10">
+              {steps.map((step, index) => {
+                const IconComponent = step.icon;
+                return (
+                  <div key={index} className="relative">
+                    <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-8 tablet:p-10 text-center hover:bg-white/15 transition-all duration-300 hover:transform hover:-translate-y-2">
+                      {/* Step Number */}
+                      <div className="text-5xl tablet:text-6xl font-bold text-white/20 mb-4 tablet:mb-6">
+                        {step.step}
+                      </div>
+                      
+                      {/* Icon */}
+                      <div className={`w-16 h-16 tablet:w-20 tablet:h-20 rounded-full bg-gradient-to-br ${step.color} flex items-center justify-center mx-auto mb-6 tablet:mb-8`}>
+                        <IconComponent className="w-8 h-8 tablet:w-10 tablet:h-10 text-white" />
+                      </div>
+
+                      {/* Content */}
+                      <h3 className="text-xl tablet:text-2xl font-semibold text-white mb-4 tablet:mb-6">
+                        {step.title}
+                      </h3>
+                      <p className="text-gray-300 tablet:text-lg leading-relaxed">
+                        {step.description}
+                      </p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
           {/* Mobile Layout */}
-          <div className="lg:hidden space-y-8">
+          <div className="tablet:hidden space-y-8">
             {steps.map((step, index) => {
               const IconComponent = step.icon;
               return (
@@ -137,7 +169,7 @@ export default function HowItWorks({ language }) {
         </div>
 
         {/* Bottom CTA */}
-        <div className="text-center mt-16">
+        <div className="text-center mt-16 tablet:mt-20">
           <button
             onClick={() => {
               const element = document.getElementById('recommendation-form');
@@ -145,7 +177,7 @@ export default function HowItWorks({ language }) {
                 element.scrollIntoView({ behavior: 'smooth' });
               }
             }}
-            className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold rounded-full hover:from-purple-700 hover:to-blue-700 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl"
+            className="inline-flex items-center px-8 tablet:px-10 py-4 tablet:py-5 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold rounded-full hover:from-purple-700 hover:to-blue-700 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl"
           >
             Start Your Journey
           </button>
