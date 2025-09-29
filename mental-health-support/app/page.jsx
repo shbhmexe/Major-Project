@@ -16,7 +16,7 @@ import { ShootingStars } from '@/components/ShootingStars';
 import { StarsBackground } from '@/components/StarsBackground';
 
 export default function HomePage() {
-  // Doctor-themed mental health support page
+  // AI-driven public health chatbot page
   const router = useRouter();
   const { user, isAuthenticated, isGuest, logout } = useAuth();
   const { t } = useLanguage();
@@ -66,7 +66,7 @@ export default function HomePage() {
   
   return (
     <div className="min-h-screen bg-gradient-to-br from-teal-50 md:from-teal-50 to-blue-50 md:to-blue-50 dark:from-gray-900/80 md:dark:from-gray-900 dark:to-gray-800/80 md:dark:to-gray-800 relative overflow-x-hidden">
-      {/* Navigation - Doctor Themed */}
+      {/* Navigation - Health Themed */}
       <nav className="bg-white dark:bg-gray-800 shadow-md border-b-2 border-teal-100 dark:border-teal-900 relative z-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
@@ -176,7 +176,7 @@ export default function HomePage() {
         </div>
       </nav>
       
-      {/* Guest Mode Banner - Medical Themed */}
+      {/* Guest Mode Banner - Health Themed */}
       {isGuest && (
         <div className="bg-teal-50 dark:bg-teal-900/30 border-b border-teal-100 dark:border-teal-800/50 p-3 relative z-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -208,12 +208,12 @@ export default function HomePage() {
       <StarsBackground className="z-0" />
       <ShootingStars className="z-0" />
       
-      {/* Hero Section - Medical Themed */}
+      {/* Hero Section - Public Health Themed */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-20 relative z-10">
         <div className="flex flex-col md:flex-row items-center justify-between">
           <div className="md:w-1/2 text-center md:text-left mb-10 md:mb-0">
             <div className="inline-block bg-teal-100 dark:bg-teal-900/30 text-teal-800 dark:text-teal-200 px-4 py-1 rounded-full text-sm font-medium mb-4">
-              Professional Mental Health Support
+              AI-Driven Public Health Education
             </div>
             <AnimatedText 
               text={t('heroTitle')} 
@@ -246,10 +246,10 @@ export default function HomePage() {
             <div className="mt-8 flex items-center justify-center md:justify-start">
               <div className="flex -space-x-2">
                 <div className="w-8 h-8 rounded-full bg-teal-200 flex items-center justify-center text-teal-800 text-xs font-bold">DR</div>
-                <div className="w-8 h-8 rounded-full bg-blue-200 flex items-center justify-center text-blue-800 text-xs font-bold">SP</div>
-                <div className="w-8 h-8 rounded-full bg-purple-200 flex items-center justify-center text-purple-800 text-xs font-bold">JK</div>
+                <div className="w-8 h-8 rounded-full bg-blue-200 flex items-center justify-center text-blue-800 text-xs font-bold">PH</div>
+                <div className="w-8 h-8 rounded-full bg-purple-200 flex items-center justify-center text-purple-800 text-xs font-bold">HC</div>
               </div>
-              <p className="ml-4 text-sm text-gray-600 dark:text-gray-400">Trusted by <span className="font-bold">50+ mental health professionals</span></p>
+              <p className="ml-4 text-sm text-gray-600 dark:text-gray-400">Trusted by <span className="font-bold">50+ public health professionals</span></p>
             </div>
           </div>
           <div className="md:w-1/2 flex justify-center">
@@ -265,24 +265,24 @@ export default function HomePage() {
                       </svg>
                     </div>
                     <div className="ml-3">
-                      <h3 className="font-medium text-gray-900 dark:text-white">Dr. Sarah Johnson</h3>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">Clinical Psychologist</p>
+                      <h3 className="font-medium text-gray-900 dark:text-white">Dr. Priya Sharma</h3>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">Public Health Specialist</p>
                     </div>
                   </div>
                   <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-800/30 dark:text-green-300">
                     Available
                   </span>
                 </div>
-                <div className="space-y-4">
-                  <div className="p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
-                    <p className="text-sm text-gray-800 dark:text-gray-200">"I specialize in anxiety, depression, and stress management for students. Book a session to discuss your concerns in a safe space."</p>
-                  </div>
+                  <div className="space-y-4">
+                    <div className="p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+                      <p className="text-sm text-gray-800 dark:text-gray-200">"I specialize in disease prevention, vaccination programs, and health awareness for rural communities. Consult for health guidance and preventive care tips."</p>
+                    </div>
                   <div className="grid grid-cols-2 gap-2">
                     <button className="flex items-center justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-teal-600 hover:bg-teal-700 dark:bg-teal-500 dark:hover:bg-teal-600">
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                       </svg>
-                      Book Session
+                      Health Consult
                     </button>
                     <button className="flex items-center justify-center py-2 px-4 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700">
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -298,7 +298,7 @@ export default function HomePage() {
         </div>
       </div>
       
-      {/* Features Section - Medical Themed */}
+      {/* Features Section - Public Health Themed */}
       <div className="bg-white dark:bg-gray-800 py-16 relative overflow-hidden">
         <div className="absolute top-0 right-0 w-64 h-64 bg-teal-100 dark:bg-teal-900/20 rounded-full filter blur-3xl opacity-30 z-0"></div>
         <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-100 dark:bg-blue-900/20 rounded-full filter blur-3xl opacity-30 z-0"></div>
@@ -306,7 +306,7 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="flex flex-col items-center justify-center mb-12">
             <span className="inline-block px-4 py-1 rounded-full text-sm font-medium bg-teal-100 dark:bg-teal-900/30 text-teal-800 dark:text-teal-200 mb-4">
-              Professional Care Features
+              Public Health Education Features
             </span>
             <AnimatedText 
               text={t('featuresTitle')} 
@@ -419,12 +419,12 @@ export default function HomePage() {
                   <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
                 </svg>
               </div>
-              <p className="text-gray-600 dark:text-gray-300 mb-4">"The AI chat helped me understand my anxiety better than months of searching online. The resources provided were exactly what I needed."</p>
+              <p className="text-gray-600 dark:text-gray-300 mb-4">"The health AI helped me understand disease symptoms and prevention better than any pamphlet. I learned when to get my family vaccinated and how to prevent common illnesses."</p>
               <div className="flex items-center">
-                <div className="w-10 h-10 bg-teal-100 dark:bg-teal-800/30 rounded-full flex items-center justify-center text-teal-700 dark:text-teal-300 font-bold text-lg">S</div>
+                <div className="w-10 h-10 bg-teal-100 dark:bg-teal-800/30 rounded-full flex items-center justify-center text-teal-700 dark:text-teal-300 font-bold text-lg">R</div>
                 <div className="ml-3">
-                  <h4 className="font-medium text-gray-900 dark:text-white">Sarah K.</h4>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">University Student</p>
+                  <h4 className="font-medium text-gray-900 dark:text-white">Rajesh M.</h4>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">Farmer from Rural Area</p>
                 </div>
               </div>
             </div>
@@ -441,12 +441,12 @@ export default function HomePage() {
                   <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
                 </svg>
               </div>
-              <p className="text-gray-600 dark:text-gray-300 mb-4">"Booking an appointment was seamless, and the professional I spoke with truly understood what I was going through. Highly recommend!"</p>
+              <p className="text-gray-600 dark:text-gray-300 mb-4">"The vaccination reminders helped my whole village stay updated on immunizations. The outbreak alerts warned us about dengue in our area and we took proper precautions."</p>
               <div className="flex items-center">
-                <div className="w-10 h-10 bg-blue-100 dark:bg-blue-800/30 rounded-full flex items-center justify-center text-blue-700 dark:text-blue-300 font-bold text-lg">M</div>
+                <div className="w-10 h-10 bg-blue-100 dark:bg-blue-800/30 rounded-full flex items-center justify-center text-blue-700 dark:text-blue-300 font-bold text-lg">P</div>
                 <div className="ml-3">
-                  <h4 className="font-medium text-gray-900 dark:text-white">Michael T.</h4>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">Graduate Student</p>
+                  <h4 className="font-medium text-gray-900 dark:text-white">Priya S.</h4>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">Village Health Worker</p>
                 </div>
               </div>
             </div>
@@ -463,12 +463,12 @@ export default function HomePage() {
                   <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
                 </svg>
               </div>
-              <p className="text-gray-600 dark:text-gray-300 mb-4">"The forum community has been incredibly supportive. It's comforting to know I'm not alone in my struggles with mental health."</p>
+              <p className="text-gray-600 dark:text-gray-300 mb-4">"The health community forum helped me share preventive care tips with other mothers. We learned together about childhood diseases and their prevention."</p>
               <div className="flex items-center">
-                <div className="w-10 h-10 bg-purple-100 dark:bg-purple-800/30 rounded-full flex items-center justify-center text-purple-700 dark:text-purple-300 font-bold text-lg">J</div>
+                <div className="w-10 h-10 bg-purple-100 dark:bg-purple-800/30 rounded-full flex items-center justify-center text-purple-700 dark:text-purple-300 font-bold text-lg">A</div>
                 <div className="ml-3">
-                  <h4 className="font-medium text-gray-900 dark:text-white">Jamie L.</h4>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">First-Year Student</p>
+                  <h4 className="font-medium text-gray-900 dark:text-white">Anita D.</h4>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">Mother of Two</p>
                 </div>
               </div>
             </div>
@@ -481,8 +481,8 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-3 gap-8 mb-8">
             <div>
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">SukoonU</h3>
-              <p className="text-gray-600 dark:text-gray-400 mb-4">Professional mental health support for students, accessible anytime, anywhere.</p>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">HealthChat AI</h3>
+              <p className="text-gray-600 dark:text-gray-400 mb-4">AI-driven public health education for rural and semi-urban populations, accessible via WhatsApp and SMS.</p>
               <div className="flex space-x-4">
                 <a href="#" className="text-gray-400 hover:text-teal-500 dark:hover:text-teal-400">
                   <span className="sr-only">Twitter</span>
@@ -503,26 +503,26 @@ export default function HomePage() {
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Quick Links</h3>
               <ul className="space-y-2">
                 <li><a href="#" className="text-gray-600 dark:text-gray-400 hover:text-teal-500 dark:hover:text-teal-400">About Us</a></li>
-                <li><a href="#" className="text-gray-600 dark:text-gray-400 hover:text-teal-500 dark:hover:text-teal-400">Our Professionals</a></li>
+                <li><a href="#" className="text-gray-600 dark:text-gray-400 hover:text-teal-500 dark:hover:text-teal-400">Health Professionals</a></li>
                 <li><a href="#" className="text-gray-600 dark:text-gray-400 hover:text-teal-500 dark:hover:text-teal-400">Privacy Policy</a></li>
                 <li><a href="#" className="text-gray-600 dark:text-gray-400 hover:text-teal-500 dark:hover:text-teal-400">Terms of Service</a></li>
               </ul>
             </div>
             
             <div>
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Emergency Resources</h3>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Health Resources</h3>
               <ul className="space-y-2">
                 <li className="flex items-center">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-teal-500 dark:text-teal-400 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                   </svg>
-                  <span className="text-gray-600 dark:text-gray-400">Crisis Hotline: 988</span>
+                  <span className="text-gray-600 dark:text-gray-400">Health Helpline: 1075</span>
                 </li>
                 <li className="flex items-center">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-teal-500 dark:text-teal-400 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
                   </svg>
-                  <span className="text-gray-600 dark:text-gray-400">support@SukoonU.com</span>
+                  <span className="text-gray-600 dark:text-gray-400">support@healthchat.ai</span>
                 </li>
               </ul>
             </div>
@@ -530,7 +530,7 @@ export default function HomePage() {
           
           <div className="border-t border-gray-200 dark:border-gray-700 pt-8">
             <p className="text-gray-500 dark:text-gray-400 text-center">
-              &copy; {new Date().getFullYear()} SukoonU. All rights reserved.
+              &copy; {new Date().getFullYear()} HealthChat AI. All rights reserved.
             </p>
           </div>
         </div>
