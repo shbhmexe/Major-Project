@@ -10,11 +10,10 @@ You need to install MongoDB or use MongoDB Atlas (cloud).
 2. Sign up for a free account
 3. Create a FREE cluster (M0)
 4. Click "Connect" → "Connect your application"
-5. Copy the connection string (looks like: `mongodb+srv://username:password@cluster.mongodb.net/`)
+5. Copy the connection string (looks like: ``)
 6. Replace `<password>` with your database password
 7. Update `backend/.env` file:
    ```
-   MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/slotswapper?retryWrites=true&w=majority
    ```
 
 ## Option 2: Install MongoDB Locally
